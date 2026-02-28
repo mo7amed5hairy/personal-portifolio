@@ -154,3 +154,25 @@ AWS_BUCKET=
 AWS_USE_PATH_STYLE_ENDPOINT=false
 
 VITE_APP_NAME="${APP_NAME}"
+
+
+
+
+
+
+
+
+git pull
+composer install
+npm install
+php artisan migrate
+php artisan optimize:clear
+npm run dev
+
+
+
+
+
+
+
+
