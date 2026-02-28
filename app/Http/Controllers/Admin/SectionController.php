@@ -26,14 +26,22 @@ class SectionController extends Controller
             'content' => 'nullable|string',
             'order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
         $validated['is_active'] = $request->boolean('is_active', true);
 
+        $section = new Section();
+        if ($request->hasFile('image')) {
+            $validated['image'] = $section->uploadMedia($request->file('image'), [
+                'folder' => 'sections'
+            ]);
+        }
+
         Section::create($validated);
 
-        return redirect()->route('admin.sections.index')->with('success', 'Section created successfully!');
+        return redirect()->route('admin.sections.index')->with('success', 'تم إضافة القسم بنجاح!');
     }
 
     public function edit(Section $section)
@@ -48,19 +56,32 @@ class SectionController extends Controller
             'content' => 'nullable|string',
             'order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
         $validated['is_active'] = $request->boolean('is_active', true);
 
+        if ($request->hasFile('image')) {
+            if ($section->image) {
+                $section->deleteMedia($section->image);
+            }
+            $validated['image'] = $section->uploadMedia($request->file('image'), [
+                'folder' => 'sections'
+            ]);
+        }
+
         $section->update($validated);
 
-        return redirect()->route('admin.sections.index')->with('success', 'Section updated successfully!');
+        return redirect()->route('admin.sections.index')->with('success', 'تم تحديث القسم بنجاح!');
     }
 
     public function destroy(Section $section)
     {
+        if ($section->image) {
+            $section->deleteMedia($section->image);
+        }
         $section->delete();
-        return redirect()->route('admin.sections.index')->with('success', 'Section deleted successfully!');
+        return redirect()->route('admin.sections.index')->with('success', 'تم حذف القسم بنجاح!');
     }
 }

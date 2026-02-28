@@ -27,11 +27,26 @@ class CourseController extends Controller
             'description' => 'nullable|string',
             'completion_date' => 'nullable|date',
             'certificate_link' => 'nullable|url',
+            'course_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+        ], [
+            'title.required' => 'حقل عنوان الكورس مطلوب',
+            'provider.required' => 'حقل اسم المنصة مطلوب',
+            'course_image.image' => 'يجب أن يكون الملف صورة',
+            'course_image.mimes' => 'الصيغ المسموحة: jpeg, png, jpg, gif, svg, webp',
+            'certificate_link.url' => 'يرجى إدخال رابط صحيح',
         ]);
+
+        // Handle image upload
+        if ($request->hasFile('course_image')) {
+            $course = new Course();
+            $validated['course_image'] = $course->uploadMedia($request->file('course_image'), [
+                'folder' => 'courses'
+            ]);
+        }
 
         Course::create($validated);
 
-        return redirect()->route('admin.courses.index')->with('success', 'Course created successfully!');
+        return redirect()->route('admin.courses.index')->with('success', 'تم إضافة الكورس بنجاح!');
     }
 
     public function edit(Course $course)
@@ -47,16 +62,36 @@ class CourseController extends Controller
             'description' => 'nullable|string',
             'completion_date' => 'nullable|date',
             'certificate_link' => 'nullable|url',
+            'course_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+        ], [
+            'title.required' => 'حقل عنوان الكورس مطلوب',
+            'provider.required' => 'حقل اسم المنصة مطلوب',
+            'course_image.image' => 'يجب أن يكون الملف صورة',
+            'course_image.mimes' => 'الصيغ المسموحة: jpeg, png, jpg, gif, svg, webp',
+            'certificate_link.url' => 'يرجى إدخال رابط صحيح',
         ]);
+
+        // Handle image upload
+        if ($request->hasFile('course_image')) {
+            if ($course->course_image) {
+                $course->deleteMedia($course->course_image);
+            }
+            $validated['course_image'] = $course->uploadMedia($request->file('course_image'), [
+                'folder' => 'courses'
+            ]);
+        }
 
         $course->update($validated);
 
-        return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully!');
+        return redirect()->route('admin.courses.index')->with('success', 'تم تحديث الكورس بنجاح!');
     }
 
     public function destroy(Course $course)
     {
+        if ($course->course_image) {
+            $course->deleteMedia($course->course_image);
+        }
         $course->delete();
-        return redirect()->route('admin.courses.index')->with('success', 'Course deleted successfully!');
+        return redirect()->route('admin.courses.index')->with('success', 'تم حذف الكورس بنجاح!');
     }
 }

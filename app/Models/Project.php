@@ -15,29 +15,25 @@ class Project extends Model
     ];
 
     protected $casts = [
-        'title' => 'array',
-        'description' => 'array',
         'tags' => 'array',
         'gallery' => 'array',
         'is_featured' => 'boolean',
     ];
 
     /**
-     * Get localized title
+     * Get localized title (Arabic only now)
      */
     public function getLocalizedTitle(?string $locale = null): string
     {
-        $locale = $locale ?: app()->getLocale();
-        return $this->title[$locale] ?? $this->title['en'] ?? '';
+        return $this->title ?? '';
     }
 
     /**
-     * Get localized description
+     * Get localized description (Arabic only now)
      */
     public function getLocalizedDescription(?string $locale = null): string
     {
-        $locale = $locale ?: app()->getLocale();
-        return $this->description[$locale] ?? $this->description['en'] ?? '';
+        return $this->description ?? '';
     }
 
     /**
@@ -45,7 +41,15 @@ class Project extends Model
      */
     public function getImageUrl(): ?string
     {
-        return $this->mediaUrl($this->image);
+        if (!$this->image) {
+            return null;
+        }
+        
+        if (str_starts_with($this->image, 'http')) {
+            return $this->image;
+        }
+        
+        return 'https://localhost/personal-portifolio/storage/app/public/' . $this->image;
     }
 
     /**
@@ -53,9 +57,15 @@ class Project extends Model
      */
     public function getGalleryUrls(): array
     {
-        if (!$this->gallery) {
+        if (!$this->gallery || !is_array($this->gallery)) {
             return [];
         }
-        return $this->multipleMediaUrls($this->gallery);
+        
+        return array_map(function($path) {
+            if (str_starts_with($path, 'http')) {
+                return $path;
+            }
+            return 'https://localhost/personal-portifolio/storage/app/public/' . $path;
+        }, $this->gallery);
     }
 }

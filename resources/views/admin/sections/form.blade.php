@@ -1,59 +1,83 @@
 @extends('layouts.admin')
 
+@section('title', isset($section) ? 'تعديل قسم' : 'إضافة قسم')
+
 @section('content')
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold">{{ isset($section) ? 'Edit Section' : 'Add Section' }}</h1>
-        <p class="mt-2 text-slate-600 dark:text-slate-400">{{ isset($section) ? 'Update section details' : 'Create a new portfolio section' }}</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <div>
+            <h2 style="margin:0;font-size:24px;font-weight:bold;">{{ isset($section) ? 'تعديل قسم' : 'إضافة قسم جديد' }}</h2>
+            <p style="margin:4px 0 0;color:#666;">{{ isset($section) ? 'قم بتحديث بيانات القسم' : 'أضف قسم جديد' }}</p>
+        </div>
+        <a href="{{ route('admin.sections.index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> رجوع
+        </a>
     </div>
 
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-        <form action="{{ isset($section) ? route('admin.sections.update', $section) : route('admin.sections.store') }}" method="POST">
-            @csrf
-            @if(isset($section))
-                @method('PUT')
-            @endif
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ isset($section) ? route('admin.sections.update', $section) : route('admin.sections.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @if(isset($section))
+                    @method('PUT')
+                @endif
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium mb-2">Title</label>
-                    <input type="text" name="title" value="{{ old('title', $section->title ?? '') }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>
-                    @error('title')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Section Image (for Hero, About, etc) -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-image"></i> صورة القسم (اختياري)</label>
+                    @if(isset($section) && $section->getImageUrl())
+                        <div id="section_preview_container" style="margin-bottom:10px;">
+                            <div class="image-preview">
+                                <img src="{{ $section->getImageUrl() }}">
+                            </div>
+                        </div>
+                    @else
+                        <div id="section_preview_container"></div>
+                    @endif
+                    
+                    <div class="upload-area" onclick="document.getElementById('section_image').click()">
+                        <input type="file" id="section_image" name="image" accept="image/*" style="display:none;" onchange="previewImage(this, 'section')">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>اضغط للرفع أو اسحب الصورة هنا (لل Hero - About -Sections)</p>
+                    </div>
                 </div>
 
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium mb-2">Content</label>
-                    <textarea name="content" rows="6" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent">{{ old('content', $section->content ?? '') }}</textarea>
-                    @error('content')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Title -->
+                <div class="form-group">
+                    <label class="form-label">عنوان القسم</label>
+                    <input type="text" name="title" value="{{ old('title', $section->title ?? '') }}" 
+                           class="form-control" placeholder="الخدمات" required>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium mb-2">Order</label>
-                    <input type="number" name="order" value="{{ old('order', $section->order ?? 0) }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                    @error('order')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Content -->
+                <div class="form-group">
+                    <label class="form-label">المحتوى</label>
+                    <textarea name="content" rows="8" class="form-control" placeholder="أدخل محتوى القسم">{{ old('content', $section->content ?? '') }}</textarea>
                 </div>
 
-                <div class="flex items-center">
-                    <label class="flex items-center mt-6">
-                        <input type="checkbox" name="is_active" value="1" {{ old('is_active', $section->is_active ?? true) ? 'checked' : '' }} class="w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500">
-                        <span class="ml-2 text-sm font-medium">Active</span>
-                    </label>
-                </div>
-            </div>
+                <!-- Order & Active -->
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">الترتيب</label>
+                        <input type="number" name="order" value="{{ old('order', $section->order ?? 0) }}" class="form-control">
+                    </div>
 
-            <div class="mt-6 flex items-center space-x-4">
-                <button type="submit" class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                    {{ isset($section) ? 'Update Section' : 'Create Section' }}
-                </button>
-                <a href="{{ route('admin.sections.index') }}" class="px-6 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                    Cancel
-                </a>
-            </div>
-        </form>
+                    <div class="form-group">
+                        <label class="form-label" style="display:flex;align-items:center;gap:10px;margin-top:30px;">
+                            <input type="checkbox" name="is_active" value="1" {{ old('is_active', $section->is_active ?? true) ? 'checked' : '' }}>
+                            <span>القسم نشط</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div style="display:flex;gap:12px;padding-top:20px;border-top:1px solid #eee;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        {{ isset($section) ? 'حفظ التغييرات' : 'إضافة القسم' }}
+                    </button>
+                    <a href="{{ route('admin.sections.index') }}" class="btn btn-secondary">إلغاء</a>
+                </div>
+            </form>
+        </div>
     </div>
 @endsection

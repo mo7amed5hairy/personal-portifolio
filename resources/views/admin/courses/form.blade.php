@@ -1,68 +1,89 @@
 @extends('layouts.admin')
 
+@section('title', isset($course) ? 'تعديل كورس' : 'إضافة كورس')
+
 @section('content')
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold">{{ isset($course) ? 'Edit Course' : 'Add Course' }}</h1>
-        <p class="mt-2 text-slate-600 dark:text-slate-400">{{ isset($course) ? 'Update course details' : 'Add a new course or certification' }}</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <div>
+            <h2 style="margin:0;font-size:24px;font-weight:bold;">{{ isset($course) ? 'تعديل كورس' : 'إضافة كورس جديد' }}</h2>
+            <p style="margin:4px 0 0;color:#666;">{{ isset($course) ? 'قم بتحديث بيانات الكورس' : 'أضف كورس أو شهادة جديدة' }}</p>
+        </div>
+        <a href="{{ route('admin.courses.index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> رجوع
+        </a>
     </div>
 
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-        <form action="{{ isset($course) ? route('admin.courses.update', $course) : route('admin.courses.store') }}" method="POST">
-            @csrf
-            @if(isset($course))
-                @method('PUT')
-            @endif
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ isset($course) ? route('admin.courses.update', $course) : route('admin.courses.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @if(isset($course))
+                    @method('PUT')
+                @endif
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium mb-2">Course Title</label>
-                    <input type="text" name="title" value="{{ old('title', $course->title ?? '') }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>
-                    @error('title')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Image -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-image"></i> صورة الكورس</label>
+                    @if(isset($course) && $course->getCourseImageUrl())
+                        <div id="course_preview_container" style="margin-bottom:10px;">
+                            <div class="image-preview">
+                                <img src="{{ $course->getCourseImageUrl() }}">
+                            </div>
+                        </div>
+                    @else
+                        <div id="course_preview_container"></div>
+                    @endif
+                    
+                    <div class="upload-area" onclick="document.getElementById('course_image').click()">
+                        <input type="file" id="course_image" name="course_image" accept="image/*" style="display:none;" onchange="previewImage(this, 'course')">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>اضغط للرفع أو اسحب الصورة هنا</p>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium mb-2">Provider</label>
-                    <input type="text" name="provider" value="{{ old('provider', $course->provider ?? '') }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>
-                    @error('provider')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Title -->
+                <div class="form-group">
+                    <label class="form-label">اسم الكورس</label>
+                    <input type="text" name="title" value="{{ old('title', $course->title['ar'] ?? $course->title ?? '') }}" 
+                           class="form-control" placeholder="اسم الكورس" required>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium mb-2">Completion Date</label>
-                    <input type="date" name="completion_date" value="{{ old('completion_date', isset($course) && $course->completion_date ? $course->completion_date->format('Y-m-d') : '') }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                    @error('completion_date')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Provider & Date -->
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">المنصة / المزود</label>
+                        <input type="text" name="provider" value="{{ old('provider', $course->provider ?? '') }}" 
+                               class="form-control" placeholder="Udemy, Coursera, etc." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">تاريخ الإتمام</label>
+                        <input type="date" name="completion_date" value="{{ old('completion_date', isset($course) && $course->completion_date ? $course->completion_date->format('Y-m-d') : '') }}" class="form-control">
+                    </div>
                 </div>
 
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium mb-2">Description</label>
-                    <textarea name="description" rows="4" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent">{{ old('description', $course->description ?? '') }}</textarea>
-                    @error('description')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Description -->
+                <div class="form-group">
+                    <label class="form-label">وصف الكورس</label>
+                    <textarea name="description" rows="5" class="form-control" placeholder="وصف الكورس...">{{ old('description', $course->description['ar'] ?? $course->description ?? '') }}</textarea>
                 </div>
 
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium mb-2">Certificate Link</label>
-                    <input type="url" name="certificate_link" value="{{ old('certificate_link', $course->certificate_link ?? '') }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                    @error('certificate_link')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Certificate Link -->
+                <div class="form-group">
+                    <label class="form-label">رابط الشهادة</label>
+                    <input type="url" name="certificate_link" value="{{ old('certificate_link', $course->certificate_link ?? '') }}" 
+                           class="form-control" placeholder="https://example.com/certificate">
                 </div>
-            </div>
 
-            <div class="mt-6 flex items-center space-x-4">
-                <button type="submit" class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                    {{ isset($course) ? 'Update Course' : 'Create Course' }}
-                </button>
-                <a href="{{ route('admin.courses.index') }}" class="px-6 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                    Cancel
-                </a>
-            </div>
-        </form>
+                <!-- Submit -->
+                <div style="display:flex;gap:12px;padding-top:20px;border-top:1px solid #eee;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        {{ isset($course) ? 'حفظ التغييرات' : 'إضافة الكورس' }}
+                    </button>
+                    <a href="{{ route('admin.courses.index') }}" class="btn btn-secondary">إلغاء</a>
+                </div>
+            </form>
+        </div>
     </div>
 @endsection

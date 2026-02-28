@@ -23,31 +23,70 @@ class BioController extends Controller
             'email' => 'nullable|email',
             'phone' => 'nullable|string',
             'location' => 'nullable|string',
-            'cv_path' => 'nullable|string',
-            'social_links' => 'nullable|string',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+            'cv_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+        ], [
+            'full_name.required' => 'حقل الاسم الكامل مطلوب',
+            'title.required' => 'حقل المسمى الوظيفي مطلوب',
+            'about_me.required' => 'حقل نبذة عنك مطلوب',
+            'email.email' => 'يرجى إدخال بريد إلكتروني صحيح',
+            'profile_image.image' => 'يجب أن يكون الملف صورة',
+            'profile_image.mimes' => 'الصيغ المسموحة: jpeg, png, jpg, gif, webp',
+            'cv_file.mimes' => 'الصيغ المسموحة: pdf, doc, docx',
         ]);
 
-        // Convert social links string to array
-        if (!empty($validated['social_links'])) {
-            $links = [];
-            foreach (explode(',', $validated['social_links']) as $link) {
-                $parts = explode(':', $link, 2);
-                if (count($parts) === 2) {
-                    $links[trim($parts[0])] = trim($parts[1]);
-                }
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            $bio = Bio::first();
+            if ($bio && $bio->profile_image) {
+                $bio->deleteMedia($bio->profile_image);
             }
-            $validated['social_links'] = $links;
-        } else {
-            $validated['social_links'] = [];
+            $bioForUpload = $bio ?? new Bio();
+            $validated['profile_image'] = $bioForUpload->uploadMedia($request->file('profile_image'), [
+                'folder' => 'bio'
+            ]);
         }
 
+        // Handle CV upload
+        if ($request->hasFile('cv_file')) {
+            $bio = Bio::first();
+            if ($bio && $bio->cv_path) {
+                $bio->deleteMedia($bio->cv_path);
+            }
+            $bioForUpload = $bio ?? new Bio();
+            $validated['cv_path'] = $bioForUpload->uploadMedia($request->file('cv_file'), [
+                'folder' => 'bio'
+            ]);
+        }
+
+        // Store Arabic only (not as array)
         $bio = Bio::first();
-        if ($bio) {
-            $bio->update($validated);
-        } else {
-            Bio::create($validated);
+        $data = [
+            'full_name' => $validated['full_name'],
+            'title' => $validated['title'],
+            'about_me' => $validated['about_me'],
+            'email' => $validated['email'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'location' => $validated['location'] ?? null,
+        ];
+
+        // Add profile image if uploaded
+        if (isset($validated['profile_image'])) {
+            $data['profile_image'] = $validated['profile_image'];
         }
 
-        return redirect()->route('admin.bio.edit')->with('success', 'Bio updated successfully!');
+        // Add CV if uploaded
+        if (isset($validated['cv_path'])) {
+            $data['cv_path'] = $validated['cv_path'];
+        }
+
+        if ($bio) {
+            $bio->update($data);
+            $bio->refresh();
+        } else {
+            $bio = Bio::create($data);
+        }
+
+        return redirect()->route('admin.bio.edit')->with('success', 'تم حفظ البيانات بنجاح!');
     }
 }

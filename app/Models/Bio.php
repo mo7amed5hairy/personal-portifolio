@@ -15,28 +15,24 @@ class Bio extends Model
     ];
 
     protected $casts = [
-        'title' => 'array',
-        'about_me' => 'array',
         'social_links' => 'array',
         'skills' => 'array',
     ];
 
     /**
-     * Get localized title
+     * Get title (Arabic only now)
      */
     public function getLocalizedTitle(?string $locale = null): string
     {
-        $locale = $locale ?: app()->getLocale();
-        return $this->title[$locale] ?? $this->title['en'] ?? '';
+        return $this->title ?? '';
     }
 
     /**
-     * Get localized about me
+     * Get about me (Arabic only now)
      */
     public function getLocalizedAbout(?string $locale = null): string
     {
-        $locale = $locale ?: app()->getLocale();
-        return $this->about_me[$locale] ?? $this->about_me['en'] ?? '';
+        return $this->about_me ?? '';
     }
 
     /**
@@ -44,7 +40,15 @@ class Bio extends Model
      */
     public function getProfileImageUrl(): ?string
     {
-        return $this->mediaUrl($this->profile_image);
+        if (!$this->profile_image) {
+            return null;
+        }
+        
+        if (str_starts_with($this->profile_image, 'http')) {
+            return $this->profile_image;
+        }
+        
+        return 'https://localhost/personal-portifolio/storage/app/public/' . $this->profile_image;
     }
 
     /**
@@ -52,7 +56,15 @@ class Bio extends Model
      */
     public function getHeroVideoUrl(): ?string
     {
-        return $this->mediaUrl($this->hero_video);
+        if (!$this->hero_video) {
+            return null;
+        }
+        
+        if (str_starts_with($this->hero_video, 'http')) {
+            return $this->hero_video;
+        }
+        
+        return 'https://localhost/personal-portifolio/storage/app/public/' . $this->hero_video;
     }
 
     /**
@@ -60,6 +72,14 @@ class Bio extends Model
      */
     public function getCvUrl(): ?string
     {
-        return $this->mediaUrl($this->cv_path);
+        if (!$this->cv_path) {
+            return null;
+        }
+        
+        if (str_starts_with($this->cv_path, 'http')) {
+            return $this->cv_path;
+        }
+        
+        return 'https://localhost/personal-portifolio/storage/app/public/' . $this->cv_path;
     }
 }

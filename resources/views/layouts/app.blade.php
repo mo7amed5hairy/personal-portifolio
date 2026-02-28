@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Portfolio') }}</title>
-    <link rel="stylesheet" href="{{ asset('build/assets/app-BIcgRnCI.css') }}">
-    <script src="{{ asset('build/assets/app-CKl8NZMC.js') }}" defer></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         [x-cloak] { display: none !important; }

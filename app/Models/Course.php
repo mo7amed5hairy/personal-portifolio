@@ -15,27 +15,23 @@ class Course extends Model
     ];
 
     protected $casts = [
-        'title' => 'array',
-        'description' => 'array',
         'completion_date' => 'date',
     ];
 
     /**
-     * Get localized title
+     * Get localized title (Arabic only now)
      */
     public function getLocalizedTitle(?string $locale = null): string
     {
-        $locale = $locale ?: app()->getLocale();
-        return $this->title[$locale] ?? $this->title['en'] ?? '';
+        return $this->title ?? '';
     }
 
     /**
-     * Get localized description
+     * Get localized description (Arabic only now)
      */
     public function getLocalizedDescription(?string $locale = null): string
     {
-        $locale = $locale ?: app()->getLocale();
-        return $this->description[$locale] ?? $this->description['en'] ?? '';
+        return $this->description ?? '';
     }
 
     /**
@@ -43,7 +39,15 @@ class Course extends Model
      */
     public function getCourseImageUrl(): ?string
     {
-        return $this->mediaUrl($this->course_image);
+        if (!$this->course_image) {
+            return null;
+        }
+        
+        if (str_starts_with($this->course_image, 'http')) {
+            return $this->course_image;
+        }
+        
+        return 'https://localhost/personal-portifolio/storage/app/public/' . $this->course_image;
     }
 
     /**
@@ -51,6 +55,14 @@ class Course extends Model
      */
     public function getCertificateImageUrl(): ?string
     {
-        return $this->mediaUrl($this->certificate_image);
+        if (!$this->certificate_image) {
+            return null;
+        }
+        
+        if (str_starts_with($this->certificate_image, 'http')) {
+            return $this->certificate_image;
+        }
+        
+        return 'https://localhost/personal-portifolio/storage/app/public/' . $this->certificate_image;
     }
 }

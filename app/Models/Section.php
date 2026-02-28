@@ -2,34 +2,48 @@
 
 namespace App\Models;
 
+use App\Traits\HasMediaUpload;
 use Illuminate\Database\Eloquent\Model;
 
 class Section extends Model
 {
-    protected $fillable = ['title', 'slug', 'content', 'order', 'is_active'];
+    use HasMediaUpload;
+    
+    protected $fillable = ['title', 'slug', 'content', 'order', 'is_active', 'image'];
 
     protected $casts = [
-        'title' => 'array',
-        'content' => 'array',
         'is_active' => 'boolean',
     ];
 
     /**
-     * Get localized title
+     * Get localized title (Arabic only now)
      */
     public function getLocalizedTitle(?string $locale = null): string
     {
-        $locale = $locale ?: app()->getLocale();
-        return $this->title[$locale] ?? $this->title['en'] ?? '';
+        return $this->title ?? '';
     }
 
     /**
-     * Get localized content
+     * Get localized content (Arabic only now)
      */
-    public function getLocalizedContent(?string $locale = null): ?array
+    public function getLocalizedContent(?string $locale = null): ?string
     {
-        $locale = $locale ?: app()->getLocale();
-        $content = $this->content[$locale] ?? $this->content['en'] ?? null;
-        return $content ? json_decode($content, true) : null;
+        return $this->content ?? null;
+    }
+
+    /**
+     * Get section image URL
+     */
+    public function getImageUrl(): ?string
+    {
+        if (!$this->image) {
+            return null;
+        }
+        
+        if (str_starts_with($this->image, 'http')) {
+            return $this->image;
+        }
+        
+        return 'https://localhost/personal-portifolio/storage/app/public/' . $this->image;
     }
 }

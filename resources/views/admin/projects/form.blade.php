@@ -1,91 +1,106 @@
 @extends('layouts.admin')
 
+@section('title', isset($project) ? 'تعديل مشروع' : 'إضافة مشروع')
+
 @section('content')
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold">{{ isset($project) ? 'Edit Project' : 'Add Project' }}</h1>
-        <p class="mt-2 text-slate-600 dark:text-slate-400">{{ isset($project) ? 'Update your project details' : 'Create a new project for your portfolio' }}</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <div>
+            <h2 style="margin:0;font-size:24px;font-weight:bold;">{{ isset($project) ? 'تعديل مشروع' : 'إضافة مشروع جديد' }}</h2>
+            <p style="margin:4px 0 0;color:#666;">{{ isset($project) ? 'قم بتحديث بيانات المشروع' : 'أضف مشروع جديد لمعرض أعمالك' }}</p>
+        </div>
+        <a href="{{ route('admin.projects.index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-right"></i> رجوع
+        </a>
     </div>
 
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-        <form action="{{ isset($project) ? route('admin.projects.update', $project) : route('admin.projects.store') }}" method="POST">
-            @csrf
-            @if(isset($project))
-                @method('PUT')
-            @endif
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ isset($project) ? route('admin.projects.update', $project) : route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @if(isset($project))
+                    @method('PUT')
+                @endif
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium mb-2">Title</label>
-                    <input type="text" name="title" value="{{ old('title', $project->title ?? '') }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>
-                    @error('title')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Image Upload -->
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-image"></i> صورة المشروع</label>
+                    @if(isset($project) && $project->getImageUrl())
+                        <div id="project_preview_container" style="margin-bottom:10px;">
+                            <div class="image-preview">
+                                <img src="{{ $project->getImageUrl() }}">
+                            </div>
+                        </div>
+                    @else
+                        <div id="project_preview_container"></div>
+                    @endif
+                    
+                    <div class="upload-area" onclick="document.getElementById('project_image').click()">
+                        <input type="file" id="project_image" name="image" accept="image/*" style="display:none;" onchange="previewImage(this, 'project')">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>اضغط للرفع أو اسحب الصورة هنا</p>
+                        <p style="font-size:12px;color:#999;">PNG, JPG - الحد الأقصى 5MB</p>
+                    </div>
                 </div>
 
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium mb-2">Description</label>
-                    <textarea name="description" rows="4" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent" required>{{ old('description', $project->description ?? '') }}</textarea>
-                    @error('description')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Title -->
+                <div class="form-group">
+                    <label class="form-label">اسم المشروع</label>
+                    <input type="text" name="title" value="{{ old('title', $project->title['ar'] ?? $project->title ?? '') }}" 
+                           class="form-control" placeholder="اسم المشروع" required>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium mb-2">Image URL</label>
-                    <input type="text" name="image" value="{{ old('image', $project->image ?? '') }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                    @error('image')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Description -->
+                <div class="form-group">
+                    <label class="form-label">وصف المشروع</label>
+                    <textarea name="description" rows="5" class="form-control" placeholder="وصف المشروع...">{{ old('description', $project->description['ar'] ?? $project->description ?? '') }}</textarea>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium mb-2">Project Link</label>
-                    <input type="url" name="link" value="{{ old('link', $project->link ?? '') }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                    @error('link')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Links -->
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">رابط المشروع</label>
+                        <input type="url" name="link" value="{{ old('link', $project->link ?? '') }}" 
+                               class="form-control" placeholder="https://example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">رابط GitHub</label>
+                        <input type="url" name="github_link" value="{{ old('github_link', $project->github_link ?? '') }}" 
+                               class="form-control" placeholder="https://github.com/...">
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium mb-2">GitHub Link</label>
-                    <input type="url" name="github_link" value="{{ old('github_link', $project->github_link ?? '') }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                    @error('github_link')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Tags -->
+                <div class="form-group">
+                    <label class="form-label">التقنيات (مفصولة بفواصل)</label>
+                    <input type="text" name="tags" value="{{ old('tags', isset($project) ? implode(', ', is_array($project->tags) ? $project->tags : json_decode($project->tags, true) ?? []) : '') }}" 
+                           class="form-control" placeholder="Laravel, PHP, Vue.js">
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium mb-2">Order</label>
-                    <input type="number" name="order" value="{{ old('order', $project->order ?? 0) }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                    @error('order')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Order & Featured -->
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">الترتيب</label>
+                        <input type="number" name="order" value="{{ old('order', $project->order ?? 0) }}" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" style="display:flex;align-items:center;gap:10px;margin-top:30px;">
+                            <input type="checkbox" name="is_featured" value="1" {{ old('is_featured', $project->is_featured ?? false) ? 'checked' : '' }}>
+                            <span>مشروع مميز</span>
+                        </label>
+                    </div>
                 </div>
 
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium mb-2">Tags (comma separated)</label>
-                    <input type="text" name="tags" value="{{ old('tags', isset($project) ? implode(', ', $project->tags ?? []) : '') }}" class="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent" placeholder="Laravel, PHP, Tailwind CSS">
-                    @error('tags')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                <!-- Submit -->
+                <div style="display:flex;gap:12px;padding-top:20px;border-top:1px solid #eee;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        {{ isset($project) ? 'حفظ التغييرات' : 'إضافة المشروع' }}
+                    </button>
+                    <a href="{{ route('admin.projects.index') }}" class="btn btn-secondary">إلغاء</a>
                 </div>
-
-                <div class="md:col-span-2">
-                    <label class="flex items-center">
-                        <input type="checkbox" name="is_featured" value="1" {{ old('is_featured', $project->is_featured ?? false) ? 'checked' : '' }} class="w-4 h-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500">
-                        <span class="ml-2 text-sm font-medium">Featured Project</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="mt-6 flex items-center space-x-4">
-                <button type="submit" class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
-                    {{ isset($project) ? 'Update Project' : 'Create Project' }}
-                </button>
-                <a href="{{ route('admin.projects.index') }}" class="px-6 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                    Cancel
-                </a>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 @endsection
