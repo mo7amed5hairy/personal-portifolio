@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ $locale }}" dir="{{ $locale === 'ar' ? 'rtl' : 'ltr' }}" class="scroll-smooth">
+<html lang="{{ $locale }}" dir="{{ $locale === 'ar' ? 'rtl' : 'ltr' }}" class="scroll-smooth" style="scroll-behavior: smooth;">
 
 <head>
     <meta charset="utf-8">
@@ -17,14 +17,36 @@
             --primary-dark: #4f46e5;
             --secondary: #8b5cf6;
             --accent: #ec4899;
-            --success: #10b981;
+            --success: #0284c7;
             --warning: #f59e0b;
-            --dark: #0f172a;
-            --light: #f8fafc;
+            --dark-bg: #0f172a;
+            --light-bg: #f8fafc;
+            --card-bg-light: rgba(255, 255, 255, 0.9);
+            --card-bg-dark: rgba(15, 23, 42, 0.82);
         }
 
         [x-cloak] {
             display: none !important;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        body {
+            transition: background-color 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            scroll-behavior: smooth;
+        }
+
+        .dark body {
+            background-color: #020617;
         }
 
         .font-arabic {
@@ -43,19 +65,30 @@
         }
 
         .hero-gradient {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent),
+                radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.1), transparent),
+                #f8fafc;
+            transition: all 0.6s ease;
+        }
+
+        .dark .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.2), transparent),
+                radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.15), transparent),
+                #020617;
         }
 
         .glass-effect {
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--card-bg-light);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s ease;
         }
 
         .dark .glass-effect {
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg-dark);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
         }
 
         .card-hover {
@@ -63,8 +96,41 @@
         }
 
         .card-hover:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .card-hover:hover {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-link-premium {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            color: #94a3b8;
+            /* gray-400 */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dark .nav-link-premium {
+            color: #cbd5e1;
+            /* gray-300 */
+        }
+
+        .nav-link-premium:hover {
+            background-color: rgba(99, 102, 241, 0.08);
+            /* indigo-500/8 */
+            color: #4f46e5;
+            /* indigo-600 */
+            transform: translateY(-1px);
+        }
+
+        .dark .nav-link-premium:hover {
+            background-color: rgba(99, 102, 241, 0.15);
+            /* indigo-500/15 */
+            color: #818cf8;
+            /* indigo-400 */
         }
 
         .btn-primary {
@@ -72,19 +138,9 @@
             transition: all 0.3s ease;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
-        }
-
-        .skill-bar {
-            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-            transition: width 1.5s ease-out;
-        }
-
         .fade-in {
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -105,7 +161,7 @@
             }
 
             50% {
-                transform: translateY(-25px) rotate(5deg);
+                transform: translateY(-15px) rotate(3deg);
             }
         }
 
@@ -113,8 +169,9 @@
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.5;
+            opacity: 0.35;
             animation: blob-float 15s ease-in-out infinite;
+            z-index: 0;
         }
 
         .blob-1 {
@@ -161,16 +218,64 @@
             }
         }
 
-        .nav-blur {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        /* Project & Course Card Base */
+        .premium-card {
+            background: white;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .dark .premium-card {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-align: justify;
+        }
+
+        /* Global Text Transitions */
+        p:not(.ignore-dark),
+        .text-gray-600,
+        .text-gray-500 {
+            transition: color 0.6s ease;
+        }
+
+        .dark p,
+        .dark .text-gray-600,
+        .dark .text-gray-500 {
+            color: #94a3b8 !important;
+            /* Premium Slate-400 */
+        }
+
+        .dark h1,
+        .dark h2,
+        .dark h3:not(.ignore-dark),
+        .dark h4 {
+            color: #f8fafc !important;
+            /* Premium Slate-50 */
         }
 
         .dark .nav-blur {
-            background: rgba(15, 23, 42, 0.85);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(2, 6, 23, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
+
+        /* Skills Progress Bar */
+        .skill-bar {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: width 1.5s ease-out;
+        }
+
+
 
         .project-card {
             position: relative;
@@ -347,6 +452,69 @@
             -webkit-mask-composite: xor;
             mask-composite: exclude;
         }
+
+        /* Project Tags - Premium Style */
+        .tag-pill {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(139, 92, 246, 0.12) 50%, rgba(236, 72, 153, 0.12) 100%);
+            color: #8b5cf6;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            transition: all 0.3s ease;
+            letter-spacing: 0.08em;
+        }
+
+        .tag-pill:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(139, 92, 246, 0.25) 50%, rgba(236, 72, 153, 0.25) 100%);
+            border-color: rgba(139, 92, 246, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+        }
+
+        .dark .tag-pill {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 50%, rgba(236, 72, 153, 0.15) 100%);
+            color: #c4b5fd;
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .dark .tag-pill:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(139, 92, 246, 0.3) 50%, rgba(236, 72, 153, 0.3) 100%);
+            border-color: rgba(139, 92, 246, 0.6);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+        }
+
+        /* More Button - Gradient Style */
+        .more-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .more-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            border-radius: 2px;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .more-btn:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .more-btn i {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
     </style>
 </head>
 
@@ -374,13 +542,13 @@
                     <a href="#home" class="text-2xl md:text-3xl font-bold gradient-text">{{ $bio->full_name ?? 'Portfolio' }}</a>
                 </div>
 
-                <div class="hidden lg:flex items-center space-x-8 {{ $locale === 'ar' ? 'space-x-reverse' : '' }}">
-                    <a href="#home" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition-colors font-medium">{{ __('messages.home') }}</a>
-                    <a href="#about" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition-colors font-medium">{{ __('messages.about') }}</a>
-                    <a href="#services" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition-colors font-medium">{{ __('messages.services') }}</a>
-                    <a href="#projects" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition-colors font-medium">{{ __('messages.projects') }}</a>
-                    <a href="#courses" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition-colors font-medium">{{ __('messages.courses') }}</a>
-                    <a href="#contact" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 transition-colors font-medium">{{ __('messages.contact') }}</a>
+                <div class="hidden lg:flex items-center gap-x-8">
+                    <a href="#home" class="nav-link-premium">{{ __('messages.home') }}</a>
+                    <a href="#about" class="nav-link-premium">{{ __('messages.about') }}</a>
+                    <a href="#services" class="nav-link-premium">{{ __('messages.services') }}</a>
+                    <a href="#projects" class="nav-link-premium">{{ __('messages.projects') }}</a>
+                    <a href="#courses" class="nav-link-premium">{{ __('messages.courses') }}</a>
+                    <a href="#contact" class="nav-link-premium">{{ __('messages.contact') }}</a>
                 </div>
 
                 <div class="flex items-center space-x-4">
@@ -412,8 +580,7 @@
 
     <!-- Hero Section -->
     @php
-    $heroSection = $sections->firstWhere('slug', 'hero');
-    $heroContent = $heroSection ? $heroSection->getLocalizedContent() : null;
+    $heroSection = $sections->firstWhere('order', 1);
     @endphp
     <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
         <div class="absolute inset-0 hero-gradient"></div>
@@ -429,26 +596,34 @@
                     <div class="mb-6">
                         <span class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/30 text-indigo-600 dark:text-indigo-400 rounded-full font-semibold">
                             <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                            {{ $heroContent['subheadline'] ?? __('messages.available_for_work') }}
+                            {{ __('messages.available_for_work') }}
                         </span>
                     </div>
 
                     <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                        <span class="gradient-text">{{ $heroContent['headline'] ?? __('messages.hero_title') }}</span>
+                        <span class="gradient-text">{{ $heroSection?->getLocalizedTitle() ?? __('messages.hero_title') }}</span>
                     </h1>
 
-                    <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-400 max-w-2xl mb-8 leading-relaxed">
-                        {{ $bio->getLocalizedAbout() }}
-                    </p>
+                    <div x-data="{ expanded: false }" class="mb-8 max-w-2xl mx-auto lg:mx-0">
+                        <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-400 leading-relaxed transition-all duration-300"
+                            :class="expanded ? '' : 'line-clamp-3'">
+                            {{ $heroSection?->getLocalizedContent() ?? $bio->getLocalizedAbout() }}
+                        </p>
+                        <button @click="expanded = !expanded"
+                            class="mt-2 text-indigo-600 dark:text-indigo-400 font-bold hover:text-indigo-500 transition-colors flex items-center gap-2">
+                            <span x-text="expanded ? 'أقل' : 'اقرأ المزيد...'"></span>
+                            <i class="fas text-xs" :class="expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        </button>
+                    </div>
 
                     <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 {{ $locale === 'ar' ? 'flex-row-reverse' : '' }}">
                         <a href="#contact" class="btn-primary px-8 py-4 text-white rounded-full font-semibold text-lg inline-flex items-center justify-center gap-3">
                             <i class="fas fa-paper-plane"></i>
-                            {{ $heroContent['cta_primary'] ?? __('messages.hire_me') }}
+                            {{ __('messages.hire_me') }}
                         </a>
                         <a href="#projects" class="px-8 py-4 border-2 border-indigo-600 text-indigo-600 dark:text-indigo-400 rounded-full font-semibold text-lg hover:bg-indigo-600 hover:text-white transition-all inline-flex items-center justify-center gap-3">
                             <i class="fas fa-folder-open"></i>
-                            {{ $heroContent['cta_secondary'] ?? __('messages.my_work') }}
+                            {{ __('messages.my_work') }}
                         </a>
                     </div>
 
@@ -503,57 +678,76 @@
             </div>
 
             <!-- Stats -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-20">
+            @php
+            $yearsExp = $bio->years_experience ?? rand(3, 7);
+            $projectsCompleted = $bio->projects_completed ?? rand(40, 60);
+            $happyClients = $bio->happy_clients ?? rand(25, 40);
+            $awardsWon = $bio->awards_won ?? rand(10, 20);
+            @endphp
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-10">
                 <div class="text-center glass-effect rounded-2xl p-6 fade-in">
-                    <div class="text-4xl font-bold gradient-text mb-2">5+</div>
+                    <div class="text-4xl font-bold gradient-text mb-2">{{ $yearsExp }}+</div>
                     <div class="text-gray-600 dark:text-gray-400 font-medium">{{ __('messages.years_experience') }}</div>
                 </div>
                 <div class="text-center glass-effect rounded-2xl p-6 fade-in" style="animation-delay: 0.1s">
-                    <div class="text-4xl font-bold gradient-text mb-2">50+</div>
+                    <div class="text-4xl font-bold gradient-text mb-2">{{ $projectsCompleted }}+</div>
                     <div class="text-gray-600 dark:text-gray-400 font-medium">{{ __('messages.projects_completed') }}</div>
                 </div>
                 <div class="text-center glass-effect rounded-2xl p-6 fade-in" style="animation-delay: 0.2s">
-                    <div class="text-4xl font-bold gradient-text mb-2">30+</div>
+                    <div class="text-4xl font-bold gradient-text mb-2">{{ $happyClients }}+</div>
                     <div class="text-gray-600 dark:text-gray-400 font-medium">{{ __('messages.happy_clients') }}</div>
                 </div>
                 <div class="text-center glass-effect rounded-2xl p-6 fade-in" style="animation-delay: 0.3s">
-                    <div class="text-4xl font-bold gradient-text mb-2">15+</div>
+                    <div class="text-4xl font-bold gradient-text mb-2">{{ $awardsWon }}+</div>
                     <div class="text-gray-600 dark:text-gray-400 font-medium">{{ __('messages.awards_won') }}</div>
                 </div>
             </div>
-        </div>
-
-        <!-- Scroll Down -->
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2">
-            <a href="#about" class="flex flex-col items-center gap-2 text-gray-500 hover:text-indigo-600 transition-colors">
-                <span class="text-sm">{{ __('messages.scroll_down') }}</span>
-                <i class="fas fa-chevron-down animate-bounce"></i>
-            </a>
+            <!-- Scroll Down Indicator -->
+            <div class="flex justify-center mt-20 mb-12">
+                <a href="#about" @click.prevent="document.getElementById('about').scrollIntoView({ behavior: 'smooth' })"
+                    class="group flex flex-col items-center gap-3 text-gray-400 dark:text-gray-500 hover:text-indigo-600 transition-all duration-300">
+                    <span class="text-xs font-bold uppercase tracking-[0.2em] group-hover:tracking-[0.3em] transition-all">{{ __('messages.scroll_down') }}</span>
+                    <i class="fas fa-chevron-down animate-bounce text-xl"></i>
+                </a>
+            </div>
         </div>
     </section>
 
     <!-- About Section -->
     @php
-    $aboutSection = $sections->firstWhere('slug', 'about');
-    $aboutContent = $aboutSection ? $aboutSection->getLocalizedContent() : null;
+    $aboutSection = $sections->firstWhere('order', 2);
     @endphp
-    <section id="about" class="section-padding bg-white dark:bg-gray-900">
-        <div class="container-custom">
+    <section id="about" class="section-padding bg-white dark:bg-gray-900 overflow-hidden relative">
+        <div class="blob blob-1 opacity-10"></div>
+        <div class="container-custom relative z-10">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="fade-in">
                     <h2 class="text-4xl md:text-5xl font-bold mb-8">
-                        <span class="gradient-text">{{ $aboutContent['headline'] ?? 'من أنا' }}</span>
+                        <span class="gradient-text">{{ $aboutSection?->getLocalizedTitle() ?? __('messages.about') }}</span>
                     </h2>
-                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
-                        {{ $bio->getLocalizedAbout() }}
-                    </p>
+
+                    <div x-data="{ expanded: false }" class="relative mb-8">
+                        <div class="relative transition-all duration-700 ease-in-out overflow-hidden"
+                            :style="expanded ? 'max-height: 1000px' : 'max-height: 120px'">
+                            <p class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed transition-all duration-300"
+                                :class="expanded ? '' : 'line-clamp-4'">
+                                {{ $bio->getLocalizedAbout() }}
+                            </p>
+                        </div>
+
+                        <button @click="expanded = !expanded"
+                            class="mt-4 flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold hover:text-indigo-500 transition-all focus:outline-none group">
+                            <span x-text="expanded ? 'أقل' : 'اقرأ المزيد...'"></span>
+                            <i class="fas transition-transform duration-300" :class="expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        </button>
+                    </div>
 
                     @if($bio->skills)
                     @php
-                        $skills = $bio->skills;
-                        if (is_string($skills)) {
-                            $skills = json_decode($skills, true) ?? [];
-                        }
+                    $skills = $bio->skills;
+                    if (is_string($skills)) {
+                    $skills = json_decode($skills, true) ?? [];
+                    }
                     @endphp
                     @if(is_array($skills) && count($skills) > 0)
                     <div class="space-y-6">
@@ -561,10 +755,10 @@
                         <div class="fade-in">
                             <div class="flex justify-between mb-3">
                                 <span class="font-semibold text-gray-700 dark:text-gray-300">{{ $skill['name'] ?? $skill }}</span>
-                                <span class="text-indigo-600 font-medium">{{ $skill['level'] ?? '' }}%</span>
+                                <span class="text-indigo-600 dark:text-indigo-400 font-medium">{{ $skill['level'] ?? '' }}%</span>
                             </div>
                             @if(isset($skill['level']))
-                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                            <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-3 overflow-hidden border border-gray-200 dark:border-gray-700 shadow-inner">
                                 <div class="skill-bar h-3 rounded-full" style="width: {{ $skill['level'] }}%"></div>
                             </div>
                             @endif
@@ -575,38 +769,39 @@
                     @endif
                 </div>
                 <div class="fade-in relative" style="animation-delay: 0.3s">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl transform rotate-3 opacity-30"></div>
+                    <div class="relative group max-w-[300px] mx-auto lg:mx-0 lg:ml-auto">
+                        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl transform rotate-3 opacity-20 blur-xl group-hover:rotate-6 transition-transform duration-500"></div>
+                        <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl transform rotate-3 opacity-30 group-hover:rotate-2 transition-transform duration-500"></div>
                         <img src="{{ $aboutSection?->getImageUrl() ?? $bio->getProfileImageUrl() ?? 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=700&fit=crop&auto=format&format=webp' }}"
                             alt="{{ $bio->full_name }}"
-                            class="relative rounded-3xl shadow-2xl w-full object-cover">
+                            class="relative rounded-3xl shadow-2xl w-64 object-cover aspect-[4/5] object-center">
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+
     <!-- Services Section -->
     @php
-    $servicesSection = $sections->firstWhere('slug', 'services');
-    $servicesContent = $servicesSection ? $servicesSection->getLocalizedContent() : null;
+    $servicesSection = $sections->firstWhere('order', 3);
     @endphp
     <section id="services" class="section-padding bg-gradient-to-br from-gray-50 to-indigo-50 dark:from-gray-800 dark:to-gray-900">
         <div class="container-custom">
             <div class="text-center mb-16 fade-in">
                 <span class="inline-block px-4 py-2 bg-indigo-500/10 text-indigo-600 rounded-full text-sm font-semibold mb-4">{{ __('messages.services') }}</span>
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                    <span class="gradient-text">{{ $servicesContent['headline'] ?? __('messages.what_i_do') }}</span>
+                    <span class="gradient-text">{{ $servicesSection?->getLocalizedTitle() ?? __('messages.what_i_do') }}</span>
                 </h2>
-                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{{ $servicesContent['description'] ?? '' }}</p>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{{ $servicesSection?->getLocalizedContent() ?? '' }}</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 @php
-                $services = $servicesContent['services'] ?? [
+                $services = [
                 ['icon' => 'laptop-code', 'title' => __('messages.web_development'), 'description' => 'تطوير مواقع وتطبيقات ويب متكاملة باستخدام أحدث التقنيات', 'color' => 'from-blue-500 to-cyan-500'],
                 ['icon' => 'mobile-alt', 'title' => __('messages.mobile_apps'), 'description' => 'تطبيقات جوال احترافية Native و Cross-platform', 'color' => 'from-purple-500 to-pink-500'],
-                ['icon' => 'palette', 'title' => __('messages.ui_ux_design'), 'description' => 'تصميم واجهات مستخدم عصرية وجذابة用户体验', 'color' => 'from-orange-500 to-red-500'],
+                ['icon' => 'palette', 'title' => __('messages.ui_ux_design'), 'description' => 'تصميم واجهات مستخدم عصرية وجذابة وتجربة مستخدم متميزة', 'color' => 'from-orange-500 to-red-500'],
                 ['icon' => 'server', 'title' => __('messages.api_development'), 'description' => 'بناء واجهات برمجية آمنة وفعالة REST & GraphQL', 'color' => 'from-green-500 to-teal-500'],
                 ];
                 @endphp
@@ -629,17 +824,16 @@
 
     <!-- Projects Section -->
     @php
-    $projectsSection = $sections->firstWhere('slug', 'featured-projects');
-    $projectsContent = $projectsSection ? $projectsSection->getLocalizedContent() : null;
+    $projectsSection = $sections->firstWhere('order', 4);
     @endphp
     <section id="projects" class="section-padding bg-white dark:bg-gray-900">
         <div class="container-custom">
             <div class="text-center mb-16 fade-in">
                 <span class="inline-block px-4 py-2 bg-indigo-500/10 text-indigo-600 rounded-full text-sm font-semibold mb-4">{{ __('messages.projects') }}</span>
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                    <span class="gradient-text">{{ $projectsContent['headline'] ?? __('messages.featured_projects') }}</span>
+                    <span class="gradient-text">{{ $projectsSection?->getLocalizedTitle() ?? __('messages.featured_projects') }}</span>
                 </h2>
-                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{{ $projectsContent['description'] ?? '' }}</p>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{{ $projectsSection?->getLocalizedContent() ?? '' }}</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -654,122 +848,79 @@
                 ];
                 @endphp
                 @foreach($featuredProjects as $index => $project)
-                <div class="project-card group rounded-2xl shadow-xl overflow-hidden fade-in" style="animation-delay: {{ $index * 0.1 }}s">
-                    <img src="{{ $project->getImageUrl() ?? $projectImages[$index % count($projectImages)] }}"
-                        alt="{{ $project->getLocalizedTitle() }}"
-                        class="w-full h-64 object-cover">
+                <div class="premium-card group glass-effect rounded-[1.5rem] shadow-xl overflow-hidden fade-in flex flex-col" style="animation-delay: {{ $index * 0.1 }}s">
+                    <div class="relative aspect-video overflow-hidden">
+                        <img src="{{ $project->getImageUrl() ?? $projectImages[$index % count($projectImages)] }}"
+                            alt="{{ $project->getLocalizedTitle() }}"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div class="flex gap-4 {{ $locale === 'ar' ? 'flex-row-reverse' : '' }}">
+                                @if($project->link)
+                                <a href="{{ $project->link }}" target="_blank" class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center hover:bg-indigo-600 transition-colors">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                                @endif
+                                @if($project->github_link)
+                                <a href="{{ $project->github_link }}" target="_blank" class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md text-white flex items-center justify-center hover:bg-indigo-600 transition-colors">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
 
-                    <div class="project-content">
+                    <div class="p-8 flex-grow flex flex-col">
                         @php
                         $tags = $project->tags;
                         if (is_string($tags)) {
-                            $tags = json_decode($tags, true) ?? [];
+                        $tags = json_decode($tags, true) ?? [];
                         }
                         $tags = is_array($tags) ? $tags : [];
                         $description = $project->getLocalizedDescription() ?? '';
-                        $descLength = strlen($description);
-                        $truncatedDesc = $descLength > 100 ? substr($description, 0, 100) . '...' : $description;
+                        $descLength = mb_strlen($description);
+                        $truncatedDesc = $descLength > 120 ? mb_substr($description, 0, 120) . '...' : $description;
                         @endphp
-                        
+
                         @if(count($tags) > 0)
-                        <div class="flex flex-wrap gap-2 mb-3">
+                        <div class="flex flex-wrap gap-2 mb-4">
                             @foreach(array_slice($tags, 0, 3) as $tag)
-                            <span class="px-3 py-1 bg-indigo-600/90 text-white text-xs rounded-full">{{ trim($tag, '"') }}</span>
+                            <span class="tag-pill px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full">{{ trim($tag, '"') }}</span>
                             @endforeach
                         </div>
                         @endif
-                        
-                        <h3 class="text-xl font-bold text-white mb-2">{{ $project->getLocalizedTitle() }}</h3>
-                        
-                        @if($descLength > 100)
-                        <div x-data="{ expanded: false }" class="mb-4">
-                            <p class="text-gray-300 text-sm" x-show="!expanded">{{ $truncatedDesc }}</p>
-                            <p class="text-gray-300 text-sm" x-show="expanded" x-cloak>{{ $description }}</p>
-                            <button @click="expanded = !expanded" class="text-indigo-400 text-sm mt-1 hover:underline">
-                                <span x-show="!expanded">المزيد</span>
-                                <span x-show="expanded" x-cloak>أقل</span>
+
+                        <h3 class="text-xl font-bold mb-4 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{{ $project->getLocalizedTitle() }}</h3>
+
+                        <div x-data="{ expanded: false }" class="mb-6 flex-grow">
+                            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed"
+                                :class="expanded ? '' : 'line-clamp-3'">
+                                <span x-show="!expanded">{{ $truncatedDesc }}</span>
+                                <span x-show="expanded" x-cloak>{{ $description }}</span>
+                            </p>
+
+                            @if($descLength > 120)
+                            <button @click="expanded = !expanded" class="more-btn text-sm mt-3 font-bold flex items-center gap-2 transition-all duration-300 hover:gap-3">
+                                <span x-text="expanded ? 'أقل' : 'المزيد'"></span>
+                                <i class="fas text-xs transition-transform duration-300" :class="expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                             </button>
+                            @endif
                         </div>
-                        @else
-                        <p class="text-gray-300 text-sm mb-4">{{ $description }}</p>
-                        @endif
-                        
-                        <div class="flex gap-4 {{ $locale === 'ar' ? 'flex-row-reverse' : '' }}">
-                            @if($project->link)
-                            <a href="{{ $project->link }}" target="_blank" class="text-white hover:text-indigo-400 transition flex items-center gap-2">
-                                <i class="fas fa-external-link-alt"></i>
-                                {{ __('messages.live_demo') }}
+
+                        <div class="pt-6 border-t border-gray-100 dark:border-white/5 flex justify-between items-center mt-auto">
+                            <div class="flex items-center gap-2">
+                                <div class="w-8 h-8 rounded-full bg-indigo-500/10 flex items-center justify-center">
+                                    <i class="fas fa-layer-group text-indigo-600 text-xs"></i>
+                                </div>
+                                <span class="text-xs text-gray-500">{{ count($tags) }} {{ __('messages.technologies') }}</span>
+                            </div>
+                            <a href="{{ $project->link ?? '#' }}" class="text-sm font-bold text-gray-900 dark:text-gray-100 hover:text-indigo-600 transition-colors flex items-center gap-2 group/link">
+                                {{ __('messages.view_project') }}
+                                <i class="fas fa-arrow-{{ $locale === 'ar' ? 'left' : 'right' }} text-xs transition-transform group-hover/link:translate-{{ $locale === 'ar' ? 'x-[-4px]' : 'x-1' }}"></i>
                             </a>
-                            @endif
-                            @if($project->github_link)
-                            <a href="{{ $project->github_link }}" target="_blank" class="text-white hover:text-indigo-400 transition flex items-center gap-2">
-                                <i class="fab fa-github"></i>
-                                {{ __('messages.github') }}
-                            </a>
-                            @endif
                         </div>
                     </div>
                 </div>
                 @endforeach
-                        @endif
-                        
-                        <h3 class="text-xl font-bold text-white mb-2">{{ $project->getLocalizedTitle() }}</h3>
-                        
-                        @php
-                        $description = $project->getLocalizedDescription() ?? '';
-                        $truncatedDesc = strlen($description) > 100 ? substr($description, 0, 100) . '...' : $description;
-                        @endphp
-                        
-                        @if(strlen($description) > 100)
-                        <div x-data="{ expanded: false }" class="mb-4">
-                            <p class="text-gray-300 text-sm" x-show="!expanded">{{ $truncatedDesc }}</p>
-                            <p class="text-gray-300 text-sm" x-show="expanded" x-cloak>{{ $description }}</p>
-                            <button @click="expanded = !expanded" class="text-indigo-400 text-sm mt-1 hover:underline">
-                                <span x-show="!expanded">المزيد</span>
-                                <span x-show="expanded" x-cloak>أقل</span>
-                            </button>
-                        </div>
-                        @else
-                        <p class="text-gray-300 text-sm mb-4">{{ $description }}</p>
-                        @endif
-                        
-                        <h3 class="text-xl font-bold text-white mb-2">{{ $project->getLocalizedTitle() }}</h3>
-                        
-                        @php
-                        $description = $project->getLocalizedDescription() ?? '';
-                        $truncatedDesc = strlen($description) > 100 ? substr($description, 0, 100) . '...' : $description;
-                        @                        @if(strendphp
-                        
-len($description) > 100)
-                        <div x-data="{ expanded: false }" class="mb-4">
-                            <p class="text-gray-300 text-sm" x-show="!expanded">{{ $truncatedDesc }}</p>
-                            <p class="text-gray-300 text-sm" x-show="expanded" x-cloak>{{ $description }}</p>
-                            <button @click="expanded = !expanded" class="text-indigo-400 text-sm mt-1 hover:underline">
-                                <span x-show="!expanded">المزيد</span>
-                                <span x-show="expanded" x-cloak>أقل</span>
-                            </button>
-                        </div>
-                        @else
-                        <p class="text-gray-300 text-sm mb-4">{{ $description }}</p>
-                        @endif
-                        
-                        <div class="flex gap-4 {{ $locale === 'ar' ? 'flex-row-reverse' : '' }}">
-                            @if($project->link)
-                            <a href="{{ $project->link }}" target="_blank" class="text-white hover:text-indigo-400 transition flex items-center gap-2">
-                                <i class="fas fa-external-link-alt"></i>
-                                {{ __('messages.live_demo') }}
-                            </a>
-                            @endif
-                            @if($project->github_link)
-                            <a href="{{ $project->github_link }}" target="_blank" class="text-white hover:text-indigo-400 transition flex items-center gap-2">
-                                <i class="fab fa-github"></i>
-                                {{ __('messages.github') }}
-                            </a>
-                            @endif
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
 
                 @if($featuredProjects->count() > 6)
                 <div class="text-center mt-12">
@@ -780,21 +931,21 @@ len($description) > 100)
                 </div>
                 @endif
             </div>
+        </div>
     </section>
 
     <!-- Courses Section -->
     @php
-    $coursesSection = $sections->firstWhere('slug', 'courses');
-    $coursesContent = $coursesSection ? $coursesSection->getLocalizedContent() : null;
+    $coursesSection = $sections->firstWhere('order', 5);
     @endphp
     <section id="courses" class="section-padding bg-gradient-to-br from-gray-50 to-purple-50 dark:from-gray-800 dark:to-gray-900">
         <div class="container-custom">
             <div class="text-center mb-16 fade-in">
                 <span class="inline-block px-4 py-2 bg-indigo-500/10 text-indigo-600 rounded-full text-sm font-semibold mb-4">{{ __('messages.my_resume') }}</span>
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                    <span class="gradient-text">{{ $coursesContent['headline'] ?? __('messages.certifications') }}</span>
+                    <span class="gradient-text">{{ $coursesSection?->getLocalizedTitle() ?? __('messages.certifications') }}</span>
                 </h2>
-                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{{ $coursesContent['description'] ?? '' }}</p>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{{ $coursesSection?->getLocalizedContent() ?? '' }}</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -809,47 +960,52 @@ len($description) > 100)
                 ];
                 @endphp
                 @foreach($courses as $index => $course)
-                <div class="course-card glass-effect rounded-2xl overflow-hidden card-hover fade-in" style="animation-delay: {{ $index * 0.1 }}s">
-                    <div class="relative">
+                <div class="premium-card group glass-effect rounded-[1.5rem] overflow-hidden card-hover fade-in flex flex-col" style="animation-delay: {{ $index * 0.1 }}s">
+                    <div class="relative aspect-[16/10] overflow-hidden">
                         <img src="{{ $course->getCourseImageUrl() ?? $courseImages[$index % count($courseImages)] }}"
                             alt="{{ $course->getLocalizedTitle() }}"
-                            class="w-full h-48 object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur text-white text-xs rounded-full">
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-center">
+                            <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest rounded-full border border-white/10">
                                 {{ $course->provider }}
                             </span>
                         </div>
                     </div>
-                    <div class="p-6">
+
+                    <div class="p-8 flex-grow flex flex-col">
                         @php
                         $courseDesc = $course->getLocalizedDescription() ?? '';
-                        $truncatedCourseDesc = strlen($courseDesc) > 80 ? substr($courseDesc, 0, 80) . '...' : $courseDesc;
+                        $courseDescLength = mb_strlen($courseDesc);
+                        $truncatedCourseDesc = $courseDescLength > 100 ? mb_substr($courseDesc, 0, 100) . '...' : $courseDesc;
                         @endphp
-                        <h3 class="text-lg font-bold mb-3 line-clamp-2">{{ $course->getLocalizedTitle() }}</h3>
-                        
-                        @if(strlen($courseDesc) > 80)
-                        <div x-data="{ expanded: false }" class="mb-4">
-                            <p class="text-gray-600 dark:text-gray-400 text-sm" x-show="!expanded">{{ $truncatedCourseDesc }}</p>
-                            <p class="text-gray-600 dark:text-gray-400 text-sm" x-show="expanded" x-cloak>{{ $courseDesc }}</p>
-                            <button @click="expanded = !expanded" class="text-indigo-600 dark:text-indigo-400 text-sm mt-1 hover:underline">
-                                <span x-show="!expanded">المزيد</span>
-                                <span x-show="expanded" x-cloak>أقل</span>
+
+                        <h3 class="text-xl font-bold mb-4 line-clamp-2 leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{{ $course->getLocalizedTitle() }}</h3>
+
+                        <div x-data="{ expanded: false }" class="mb-6 flex-grow">
+                            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed"
+                                :class="expanded ? '' : 'line-clamp-3'">
+                                <span x-show="!expanded">{{ $truncatedCourseDesc }}</span>
+                                <span x-show="expanded" x-cloak>{{ $courseDesc }}</span>
+                            </p>
+
+                            @if($courseDescLength > 100)
+                            <button @click="expanded = !expanded" class="text-indigo-600 dark:text-indigo-400 text-sm mt-3 font-bold flex items-center gap-1 hover:underline">
+                                <span x-text="expanded ? 'أقل' : 'المزيد'"></span>
+                                <i class="fas transition-transform duration-300" :class="expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                             </button>
+                            @endif
                         </div>
-                        @else
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">{{ $courseDesc }}</p>
-                        @endif
-                        
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
-                            <span class="text-sm text-gray-500">
-                                <i class="fas fa-calendar-alt ml-1"></i>
+
+                        <div class="pt-6 border-t border-gray-100 dark:border-white/5 flex justify-between items-center mt-auto">
+                            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fas fa-calendar-alt text-indigo-500"></i>
                                 {{ $course->completion_date?->format('M Y') }}
                             </span>
                             @if($course->certificate_link)
-                            <a href="{{ $course->certificate_link }}" target="_blank" class="text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-2 text-sm">
-                                <i class="fas fa-certificate"></i>
-                                {{ __('messages.certificate') }}
+                            <a href="{{ $course->certificate_link }}" target="_blank" class="text-indigo-600 dark:text-indigo-400 font-bold flex items-center gap-2 text-xs group/btn relative overflow-hidden">
+                                <span class="relative z-10">{{ __('messages.certificate') }}</span>
+                                <i class="fas fa-certificate relative z-10"></i>
                             </a>
                             @endif
                         </div>
@@ -862,17 +1018,16 @@ len($description) > 100)
 
     <!-- Contact Section -->
     @php
-    $contactSection = $sections->firstWhere('slug', 'contact');
-    $contactContent = $contactSection ? $contactSection->getLocalizedContent() : null;
+    $contactSection = $sections->firstWhere('order', 6);
     @endphp
     <section id="contact" class="section-padding bg-white dark:bg-gray-900">
         <div class="container-custom">
             <div class="text-center mb-16 fade-in">
                 <span class="inline-block px-4 py-2 bg-indigo-500/10 text-indigo-600 rounded-full text-sm font-semibold mb-4">{{ __('messages.contact') }}</span>
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">
-                    <span class="gradient-text">{{ $contactContent['headline'] ?? __('messages.get_in_touch_title') }}</span>
+                    <span class="gradient-text">{{ $contactSection?->getLocalizedTitle() ?? __('messages.get_in_touch_title') }}</span>
                 </h2>
-                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{{ $contactContent['description'] ?? __('messages.get_in_touch_subtitle') }}</p>
+                <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{{ $contactSection?->getLocalizedContent() ?? __('messages.get_in_touch_subtitle') }}</p>
             </div>
 
             <div class="grid lg:grid-cols-2 gap-16">
@@ -926,24 +1081,46 @@ len($description) > 100)
                 </div>
 
                 <div class="fade-in" style="animation-delay: 0.2s">
-                    <form class="glass-effect rounded-2xl p-8 space-y-6">
+                    @if(session('success'))
+                    <div class="mb-6 p-4 bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700 text-green-700 dark:text-green-300 rounded-xl">
+                        {{ session('success') }}
+                    </div>
+                    @endif
+                    <form action="{{ route('contact.submit') }}" method="POST" class="glass-effect rounded-2xl p-8 space-y-6">
+                        @csrf
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold mb-3">{{ __('messages.name') }}</label>
-                                <input type="text" class="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" placeholder="اسمك">
+                                <input type="text" name="name" value="{{ old('name') }}" class="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" placeholder="اسمك" required>
+                                @error('name')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold mb-3">{{ __('messages.email') }}</label>
-                                <input type="email" class="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" placeholder="بريدك@الإلكتروني.com">
+                                <input type="email" name="email" value="{{ old('email') }}" class="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" placeholder="بريدك@الإلكتروني.com" required>
+                                @error('email')
+                                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                         <div>
+                            <label class="block text-sm font-semibold mb-3">{{ __('messages.phone') }}</label>
+                            <input type="text" name="phone" value="{{ old('phone') }}" class="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" placeholder="رقم الهاتف (اختياري)">
+                        </div>
+                        <div>
                             <label class="block text-sm font-semibold mb-3">{{ __('messages.subject') }}</label>
-                            <input type="text" class="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" placeholder="موضوع الرسالة">
+                            <input type="text" name="subject" value="{{ old('subject') }}" class="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" placeholder="موضوع الرسالة" required>
+                            @error('subject')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-semibold mb-3">{{ __('messages.message') }}</label>
-                            <textarea rows="5" class="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none" placeholder="اكتب رسالتك هنا..."></textarea>
+                            <textarea name="message" rows="5" class="w-full px-5 py-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none" placeholder="اكتب رسالتك هنا..." required>{{ old('message') }}</textarea>
+                            @error('message')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <button type="submit" class="w-full btn-primary py-4 text-white rounded-xl font-bold text-lg flex items-center justify-center gap-3">
                             <i class="fas fa-paper-plane"></i>

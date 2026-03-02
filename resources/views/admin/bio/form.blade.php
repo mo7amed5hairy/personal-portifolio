@@ -298,6 +298,42 @@
         </div>
     </div>
 
+    <!-- Stats Section -->
+    <div class="form-section">
+        <h3 class="form-section-title">
+            <i class="fas fa-chart-line"></i>
+            إحصائيات الصفحة الرئيسية
+        </h3>
+        
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label class="form-label">سنوات الخبرة</label>
+                <input type="number" name="years_experience" value="{{ old('years_experience', $bio->years_experience ?? '') }}" class="form-control" placeholder="5" min="0">
+                <small style="color: #666;">اتركه فارغاً ليظهر بشكل عشوائي</small>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">المشاريع المكتملة</label>
+                <input type="number" name="projects_completed" value="{{ old('projects_completed', $bio->projects_completed ?? '') }}" class="form-control" placeholder="50" min="0">
+                <small style="color: #666;">اتركه فارغاً ليظهر بشكل عشوائي</small>
+            </div>
+        </div>
+        
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label class="form-label">العملاء السعداء</label>
+                <input type="number" name="happy_clients" value="{{ old('happy_clients', $bio->happy_clients ?? '') }}" class="form-control" placeholder="30" min="0">
+                <small style="color: #666;">اتركه فارغاً ليظهر بشكل عشوائي</small>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">الجوائز المحققة</label>
+                <input type="number" name="awards_won" value="{{ old('awards_won', $bio->awards_won ?? '') }}" class="form-control" placeholder="15" min="0">
+                <small style="color: #666;">اتركه فارغاً ليظهر بشكل عشوائي</small>
+            </div>
+        </div>
+    </div>
+
         <!-- About Section -->
     <div class="form-section">
         <h3 class="form-section-title">

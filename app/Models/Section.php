@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Section extends Model
 {
     use HasMediaUpload;
-    
-    protected $fillable = ['title', 'slug', 'content', 'order', 'is_active', 'image'];
+
+    protected $fillable = ['title', 'content', 'order', 'is_active', 'image'];
 
     protected $casts = [
         'is_active' => 'boolean',
     ];
 
     /**
-     * Get localized title (Arabic only now)
+     * الحصول على العنوان
      */
     public function getLocalizedTitle(?string $locale = null): string
     {
@@ -24,7 +24,7 @@ class Section extends Model
     }
 
     /**
-     * Get localized content (Arabic only now)
+     * الحصول على المحتوى كنص عادي
      */
     public function getLocalizedContent(?string $locale = null): ?string
     {
@@ -32,18 +32,18 @@ class Section extends Model
     }
 
     /**
-     * Get section image URL
+     * الحصول على رابط صورة القسم
      */
     public function getImageUrl(): ?string
     {
         if (!$this->image) {
             return null;
         }
-        
+
         if (str_starts_with($this->image, 'http')) {
             return $this->image;
         }
-        
+
         return 'https://localhost/personal-portifolio/storage/app/public/' . $this->image;
     }
 }

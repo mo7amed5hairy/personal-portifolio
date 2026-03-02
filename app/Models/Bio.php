@@ -11,7 +11,8 @@ class Bio extends Model
 
     protected $fillable = [
         'full_name', 'title', 'about_me', 'email', 'phone', 'location', 
-        'cv_path', 'social_links', 'profile_image', 'hero_video', 'skills'
+        'cv_path', 'social_links', 'profile_image', 'hero_video', 'skills',
+        'years_experience', 'projects_completed', 'happy_clients', 'awards_won'
     ];
 
     protected $casts = [

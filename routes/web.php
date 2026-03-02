@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Support\Facades\Route;
 
@@ -39,8 +40,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('courses', \App\Http\Controllers\Admin\CourseController::class);
         Route::get('bio', [\App\Http\Controllers\Admin\BioController::class, 'edit'])->name('bio.edit');
         Route::put('bio', [\App\Http\Controllers\Admin\BioController::class, 'update'])->name('bio.update');
+        Route::get('contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
+        Route::get('contact-messages/{message}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
+        Route::delete('contact-messages/{message}', [ContactMessageController::class, 'destroy'])->name('contact-messages.destroy');
+        Route::post('contact-messages/{message}/read', [ContactMessageController::class, 'markAsRead'])->name('contact-messages.markAsRead');
+        Route::post('contact-messages/{message}/unread', [ContactMessageController::class, 'markAsUnread'])->name('contact-messages.markAsUnread');
     });
 });
+
+// Public contact form submission
+Route::post('contact', [PublicController::class, 'submitContact'])->name('contact.submit');
 
 // Laravel expects a 'login' route for auth redirects
 Route::get('login', function () {

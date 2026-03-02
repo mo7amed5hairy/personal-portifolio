@@ -651,6 +651,9 @@
                 <a href="{{ route('admin.bio.edit') }}" class="menu-item {{ request()->routeIs('admin.bio.*') ? 'active' : '' }}">
                     <i class="fas fa-user-circle"></i> الملف الشخصي
                 </a>
+                <a href="{{ route('admin.contact-messages.index') }}" class="menu-item {{ request()->routeIs('admin.contact-messages.*') ? 'active' : '' }}">
+                    <i class="fas fa-envelope"></i> رسائل التواصل
+                </a>
                 
                 <div class="menu-divider"></div>
                 

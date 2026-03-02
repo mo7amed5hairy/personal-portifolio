@@ -30,9 +30,16 @@ class CourseController extends Controller
             'course_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
         ], [
             'title.required' => 'حقل عنوان الكورس مطلوب',
+            'title.string' => 'يجب أن يكون العنوان نصاً',
+            'title.max' => 'يجب ألا يتجاوز العنوان 255 حرفاً',
             'provider.required' => 'حقل اسم المنصة مطلوب',
+            'provider.string' => 'يجب أن يكون اسم المنصة نصاً',
+            'provider.max' => 'يجب ألا يتجاوز اسم المنصة 255 حرفاً',
+            'description.string' => 'يجب أن يكون الوصف نصاً',
+            'completion_date.date' => 'يجب أن يكون تاريخ الإنجاز تاريخاً صحيحاً',
             'course_image.image' => 'يجب أن يكون الملف صورة',
             'course_image.mimes' => 'الصيغ المسموحة: jpeg, png, jpg, gif, svg, webp',
+            'course_image.max' => 'الحد الأقصى لحجم الصورة 5 ميجابايت',
             'certificate_link.url' => 'يرجى إدخال رابط صحيح',
         ]);
 
@@ -65,9 +72,16 @@ class CourseController extends Controller
             'course_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
         ], [
             'title.required' => 'حقل عنوان الكورس مطلوب',
+            'title.string' => 'يجب أن يكون العنوان نصاً',
+            'title.max' => 'يجب ألا يتجاوز العنوان 255 حرفاً',
             'provider.required' => 'حقل اسم المنصة مطلوب',
+            'provider.string' => 'يجب أن يكون اسم المنصة نصاً',
+            'provider.max' => 'يجب ألا يتجاوز اسم المنصة 255 حرفاً',
+            'description.string' => 'يجب أن يكون الوصف نصاً',
+            'completion_date.date' => 'يجب أن يكون تاريخ الإنجاز تاريخاً صحيحاً',
             'course_image.image' => 'يجب أن يكون الملف صورة',
             'course_image.mimes' => 'الصيغ المسموحة: jpeg, png, jpg, gif, svg, webp',
+            'course_image.max' => 'الحد الأقصى لحجم الصورة 5 ميجابايت',
             'certificate_link.url' => 'يرجى إدخال رابط صحيح',
         ]);
 

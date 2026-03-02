@@ -37,16 +37,22 @@ class ProjectController extends Controller
             'tags' => 'nullable|string',
         ], [
             'title.required' => 'حقل عنوان المشروع مطلوب',
+            'title.string' => 'يجب أن يكون العنوان نصاً',
+            'title.max' => 'يجب ألا يتجاوز العنوان 255 حرفاً',
             'description.required' => 'حقل وصف المشروع مطلوب',
+            'description.string' => 'يجب أن يكون الوصف نصاً',
             'image.image' => 'يجب أن يكون الملف صورة',
             'image.mimes' => 'الصيغ المسموحة: jpeg, png, jpg, gif, svg, webp',
+            'image.max' => 'الحد الأقصى لحجم الصورة 5 ميجابايت',
             'link.url' => 'يرجى إدخال رابط صحيح',
-            'github_link.url' => 'يرجى إدخال رابط صحيح',
+            'github_link.url' => 'يرجى إدخال رابط GitHub صحيح',
+            'order.integer' => 'يجب أن يكون الترتيب رقماً صحيحاً',
+            'tags.string' => 'يجب أن تكون الوسوم نصاً',
         ]);
 
         $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
         $validated['is_featured'] = $request->boolean('is_featured');
-        
+
         // Handle image upload
         if ($request->hasFile('image')) {
             $project = new Project();
@@ -54,7 +60,7 @@ class ProjectController extends Controller
                 'folder' => 'projects'
             ]);
         }
-        
+
         // Convert tags string to array
         if (!empty($validated['tags'])) {
             $validated['tags'] = array_map('trim', explode(',', $validated['tags']));
@@ -99,16 +105,22 @@ class ProjectController extends Controller
             'tags' => 'nullable|string',
         ], [
             'title.required' => 'حقل عنوان المشروع مطلوب',
+            'title.string' => 'يجب أن يكون العنوان نصاً',
+            'title.max' => 'يجب ألا يتجاوز العنوان 255 حرفاً',
             'description.required' => 'حقل وصف المشروع مطلوب',
+            'description.string' => 'يجب أن يكون الوصف نصاً',
             'image.image' => 'يجب أن يكون الملف صورة',
             'image.mimes' => 'الصيغ المسموحة: jpeg, png, jpg, gif, svg, webp',
+            'image.max' => 'الحد الأقصى لحجم الصورة 5 ميجابايت',
             'link.url' => 'يرجى إدخال رابط صحيح',
-            'github_link.url' => 'يرجى إدخال رابط صحيح',
+            'github_link.url' => 'يرجى إدخال رابط GitHub صحيح',
+            'order.integer' => 'يجب أن يكون الترتيب رقماً صحيحاً',
+            'tags.string' => 'يجب أن تكون الوسوم نصاً',
         ]);
 
         $validated['slug'] = \Illuminate\Support\Str::slug($validated['title']);
         $validated['is_featured'] = $request->boolean('is_featured');
-        
+
         // Handle image upload
         if ($request->hasFile('image')) {
             if ($project->image) {
@@ -118,7 +130,7 @@ class ProjectController extends Controller
                 'folder' => 'projects'
             ]);
         }
-        
+
         if (!empty($validated['tags'])) {
             $validated['tags'] = array_map('trim', explode(',', $validated['tags']));
         } else {

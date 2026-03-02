@@ -25,14 +25,28 @@ class BioController extends Controller
             'location' => 'nullable|string',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'cv_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+            'years_experience' => 'nullable|integer|min:0',
+            'projects_completed' => 'nullable|integer|min:0',
+            'happy_clients' => 'nullable|integer|min:0',
+            'awards_won' => 'nullable|integer|min:0',
         ], [
             'full_name.required' => 'حقل الاسم الكامل مطلوب',
+            'full_name.string' => 'يجب أن يكون الاسم نصاً',
+            'full_name.max' => 'يجب ألا يتجاوز الاسم 255 حرفاً',
             'title.required' => 'حقل المسمى الوظيفي مطلوب',
+            'title.string' => 'يجب أن يكون المسمى الوظيفي نصاً',
+            'title.max' => 'يجب ألا يتجاوز المسمى الوظيفي 255 حرفاً',
             'about_me.required' => 'حقل نبذة عنك مطلوب',
+            'about_me.string' => 'يجب أن تكون النبذة نصاً',
             'email.email' => 'يرجى إدخال بريد إلكتروني صحيح',
+            'phone.string' => 'يجب أن يكون رقم الهاتف نصاً',
+            'location.string' => 'يجب أن يكون الموقع نصاً',
             'profile_image.image' => 'يجب أن يكون الملف صورة',
             'profile_image.mimes' => 'الصيغ المسموحة: jpeg, png, jpg, gif, webp',
+            'profile_image.max' => 'الحد الأقصى لحجم الصورة 5 ميجابايت',
+            'cv_file.file' => 'يجب أن يكون الملف من نوع ملف',
             'cv_file.mimes' => 'الصيغ المسموحة: pdf, doc, docx',
+            'cv_file.max' => 'الحد الأقصى لحجم الملف 10 ميجابايت',
         ]);
 
         // Handle profile image upload
@@ -68,6 +82,10 @@ class BioController extends Controller
             'email' => $validated['email'] ?? null,
             'phone' => $validated['phone'] ?? null,
             'location' => $validated['location'] ?? null,
+            'years_experience' => $validated['years_experience'] ?? null,
+            'projects_completed' => $validated['projects_completed'] ?? null,
+            'happy_clients' => $validated['happy_clients'] ?? null,
+            'awards_won' => $validated['awards_won'] ?? null,
         ];
 
         // Add profile image if uploaded
