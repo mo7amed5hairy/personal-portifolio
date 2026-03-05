@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>لوحة التحكم - {{ config('app.name', 'Portfolio') }}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+    <link href="{{ asset('css/summernote-bs4.min.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        [x-cloak] { display: none !important; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
             --primary: #6366f1;
@@ -345,6 +346,9 @@
             .sidebar.open { transform: translateX(0); }
             .main-content { margin-right: 0; }
             .content { padding: 20px; }
+            .sidebar-overlay { display: block; pointer-events: none; }
+            .sidebar-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
+            .sidebar-close { display: block !important; position: absolute; left: 15px; top: 15px; }
         }
         
         /* Alerts */
@@ -603,9 +607,10 @@
             color: #94a3b8;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ar-AR.min.js"></script>
+    <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('js/alpine.min.js') }}" defer></script>
+    <script src="{{ asset('js/summernote-bs4.min.js') }}"></script>
+    <script src="{{ asset('js/summernote-ar-AR.min.js') }}"></script>
     <script>
         // Dark mode toggle functionality
         document.addEventListener('DOMContentLoaded', function() {
@@ -629,9 +634,15 @@
 </head>
 <body>
     <div class="admin-wrapper">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+        
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
+                <button class="sidebar-close" onclick="closeSidebar()" style="display:none;background:none;border:none;color:white;font-size:20px;cursor:pointer;">
+                    <i class="fas fa-times"></i>
+                </button>
                 <h2><i class="fas fa-cube"></i> لوحة التحكم</h2>
                 <div class="sidebar-brand">مدير الموقع الشخصي</div>
             </div>
@@ -729,7 +740,26 @@
     <script>
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
         }
+        
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('active');
+        }
+        
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.querySelector('.toggle-btn');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (sidebar && sidebar.classList.contains('open')) {
+                if (!sidebar.contains(e.target) && !toggleBtn.contains(e.target) && e.target !== overlay) {
+                    closeSidebar();
+                }
+            }
+        });
         
         $(document).ready(function() {
             $('.summernote').summernote({

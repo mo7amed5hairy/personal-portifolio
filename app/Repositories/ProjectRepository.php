@@ -14,11 +14,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
     public function getFeatured()
     {
-        return $this->model->where('is_featured', true)->orderBy('order')->get();
+        return $this->model->where('is_featured', true)->orderBy('order');
     }
 
     public function getOrdered()
     {
-        return $this->model->orderBy('order')->get();
+        return $this->model->orderBy('order');
     }
 }

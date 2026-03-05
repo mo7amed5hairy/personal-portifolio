@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>دليل التركيب والتشغيل الجرافيكي - محمد خيري</title>
+        <style>
+            body {
+                font-family: "Cairo", "Inter", sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 40px;
+                background-color: #f4f7f6;
+            }
+            .document-container {
+                background: #fff;
+                padding: 50px;
+                border-radius: 12px;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                border-top: 8px solid #6366f1;
+            }
+            h1 {
+                color: #1e293b;
+                text-align: center;
+                border-bottom: 2px solid #e2e8f0;
+                padding-bottom: 20px;
+                margin-bottom: 40px;
+            }
+            h2 {
+                color: #4f46e5;
+                border-right: 4px solid #4f46e5;
+                padding-right: 15px;
+                margin-top: 40px;
+            }
+            .step-image {
+                width: 100%;
+                border-radius: 8px;
+                margin: 20px 0;
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+            .tip-box {
+                background-color: #eff6ff;
+                border-right: 6px solid #3b82f6;
+                padding: 20px;
+                border-radius: 6px;
+                margin: 30px 0;
+            }
+            .footer {
+                text-align: center;
+                margin-top: 60px;
+                color: #64748b;
+                font-size: 0.9em;
+                border-top: 1px solid #e2e8f0;
+                padding-top: 20px;
+            }
+            .badge {
+                background: #fee2e2;
+                color: #ef4444;
+                padding: 4px 12px;
+                border-radius: 999px;
+                font-weight: bold;
+                font-size: 0.8em;
+            }
+            code {
+                background: #f1f5f9;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-family: monospace;
+                color: #cf222e;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="document-container">
+            <h1>🔍 دليل التركيب والتشغيل الجرافيكي الشامل</h1>
+            <p style="text-align: center; color: #64748b">
+                هذا الدليل مصمم لتسهيل عملية تنصيب مشروع "معرض الأعمال
+                الاحترافي" لمحمد خيري.
+            </p>
+
+            <hr />
+
+            <h2>1. إعداد البيئة والطرفية (Terminal)</h2>
+            <p>
+                ابدأ بفتح الـ Terminal في المجلد الرئيسي للمشروع وقم بتنفيذ
+                الأوامر الأساسية لتثبيت المكتبات وتوليد مفاتيح التطبيق.
+            </p>
+            <img
+                src="file:///C:/Users/pc/.gemini/antigravity/brain/12e0cc32-ea10-4b6c-a826-f19966a0652d/terminal_setup_guide_1772701323153.png"
+                alt="أوامر الطرفية"
+                class="step-image"
+            />
+            <ul>
+                <li><code>composer install</code> - لتثبيت مكتبات PHP.</li>
+                <li><code>php artisan key:generate</code> - لتأمين التطبيق.</li>
+                <li>
+                    <code>npm install && npm run build</code> - لبناء ملفات
+                    الواجهة (CSS/JS).
+                </li>
+            </ul>
+
+            <h2>2. إعداد قاعدة البيانات (phpMyAdmin)</h2>
+            <p>
+                توجه إلى <code>localhost/phpmyadmin</code> وأنشئ قاعدة بيانات
+                جديدة لربطها بالموقع.
+            </p>
+            <img
+                src="file:///C:/Users/pc/.gemini/antigravity/brain/12e0cc32-ea10-4b6c-a826-f19966a0652d/phpmyadmin_setup_guide_1772701343707.png"
+                alt="إعداد قواعد البيانات"
+                class="step-image"
+            />
+            <p>
+                اسم قاعدة البيانات المفضل: <code>portfolio_db</code> مع ترميز
+                <code>utf8mb4_unicode_ci</code>.
+            </p>
+
+            <h2>3. تكوين ملف الربط (.env)</h2>
+            <p>
+                قم بتعديل ملف <code>.env</code> لربط الأكواد بقاعدة البيانات
+                التي أنشأتها.
+            </p>
+            <img
+                src="file:///C:/Users/pc/.gemini/antigravity/brain/12e0cc32-ea10-4b6c-a826-f19966a0652d/env_config_guide_1772701459221.png"
+                alt="إعدادات البيئة"
+                class="step-image"
+            />
+
+            <div class="tip-box">
+                <strong>💡 ملاحظة هامة:</strong><br />
+                بعد الانتهاء، نفذ الأمر
+                <code>php artisan migrate --seed</code> لإنشاء الجداول وبذر
+                البيانات الافتراضية.
+            </div>
+
+            <h2>4. المعاينة النهائية للموقع (مطور ويب متكامل)</h2>
+            <p>
+                الآن، الموقع جاهز للعمل! استمتع بمعرض أعمالك الجديد والاحترافي.
+            </p>
+            <img
+                src="file:///C:/laragon/www/personal-portifolio/public/build/assets/home.png"
+                alt="معاينة الموقع"
+                class="step-image"
+            />
+
+            <h2>5. لوحة التحكم (Admin Dashboard)</h2>
+            <p>
+                يمكنك التحكم في كافة محتويات الموقع (المشاريع، النصوص، السير
+                الذاتية) من خلال لوحة تحكم احترافية وسهلة الاستخدام.
+            </p>
+            <img
+                src="file:///C:/laragon/www/personal-portifolio/public/build/assets/admin.png"
+                alt="لوحة التحكم"
+                class="step-image"
+            />
+
+            <hr />
+
+            <div class="footer">
+                تم التطوير بواسطة <strong>محمد خيري</strong> &copy; 2025
+                <br />
+                يمكن فتح هذا الملف عبر <strong>Ms Word</strong> أو أي متصفح
+                إنترنت.
+            </div>
+        </div>
+    </body>
+</html>

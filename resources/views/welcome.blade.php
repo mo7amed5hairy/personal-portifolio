@@ -8,9 +8,11 @@
     <title>{{ $bio->full_name ?? 'Portfolio' }} | {{ $bio->getLocalizedTitle() }}</title>
     <link rel="icon" href="{{ $bio->getProfileImageUrl() ?? asset('favicon.ico') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
+    <script defer src="{{ asset('js/alpine.min.js') }}"></script>
     <style>
         :root {
             --primary: #6366f1;
@@ -657,7 +659,7 @@
                                 </div>
                                 <div>
                                     <p class="font-bold text-sm">{{ __('messages.projects_completed') }}</p>
-                                    <p class="text-gray-500 text-xs">50+</p>
+                                    <p class="text-gray-500 text-xs">{{ 0  }}+</p>
                                 </div>
                             </div>
                         </div>
@@ -769,12 +771,12 @@
                     @endif
                 </div>
                 <div class="fade-in relative" style="animation-delay: 0.3s">
-                    <div class="relative group max-w-[300px] mx-auto lg:mx-0 lg:ml-auto">
+                    <div class="relative group max-w-[450px] mx-auto lg:mx-0">
                         <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl transform rotate-3 opacity-20 blur-xl group-hover:rotate-6 transition-transform duration-500"></div>
                         <div class="absolute inset-0 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-3xl transform rotate-3 opacity-30 group-hover:rotate-2 transition-transform duration-500"></div>
-                        <img src="{{ $aboutSection?->getImageUrl() ?? $bio->getProfileImageUrl() ?? 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=700&fit=crop&auto=format&format=webp' }}"
+                        <img src="{{ $aboutSection?->getImageUrl() ?? $bio->getProfileImageUrl() ?? 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop&auto=format&format=webp' }}"
                             alt="{{ $bio->full_name }}"
-                            class="relative rounded-3xl shadow-2xl w-64 object-cover aspect-[4/5] object-center">
+                            class="relative rounded-3xl shadow-2xl w-full object-cover aspect-[4/3] object-center">
                     </div>
                 </div>
             </div>
@@ -836,19 +838,28 @@
                 <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">{{ $projectsSection?->getLocalizedContent() ?? '' }}</p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @php
-                $projectImages = [
-                'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&auto=format&format=webp',
-                'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop&auto=format&format=webp',
-                'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=600&h=400&fit=crop&auto=format&format=webp',
-                'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=600&h=400&fit=crop&auto=format&format=webp',
-                'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop&auto=format&format=webp',
-                'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop&auto=format&format=webp',
-                ];
-                @endphp
+            @php
+            $projectImages = [
+            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&auto=format&format=webp',
+            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop&auto=format&format=webp',
+            'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=600&h=400&fit=crop&auto=format&format=webp',
+            'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=600&h=400&fit=crop&auto=format&format=webp',
+            'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=400&fit=crop&auto=format&format=webp',
+            'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop&auto=format&format=webp',
+            ];
+            $totalProjects = $featuredProjects->count();
+            $projectsPerPage = 6;
+            $totalPages = ceil($totalProjects / $projectsPerPage);
+            @endphp
+
+            <div x-data="{ currentPage: 1, totalPages: {{ $totalPages }}, perPage: {{ $projectsPerPage }} }">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($featuredProjects as $index => $project)
-                <div class="premium-card group glass-effect rounded-[1.5rem] shadow-xl overflow-hidden fade-in flex flex-col" style="animation-delay: {{ $index * 0.1 }}s">
+                <div class="premium-card group glass-effect rounded-[1.5rem] shadow-xl overflow-hidden fade-in flex flex-col project-card-item"
+                     x-show="currentPage === Math.floor({{ $index }} / perPage) + 1"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 transform scale-95"
+                     x-transition:enter-end="opacity-100 transform scale-100">
                     <div class="relative aspect-video overflow-hidden">
                         <img src="{{ $project->getImageUrl() ?? $projectImages[$index % count($projectImages)] }}"
                             alt="{{ $project->getLocalizedTitle() }}"
@@ -878,7 +889,7 @@
                         $tags = is_array($tags) ? $tags : [];
                         $description = $project->getLocalizedDescription() ?? '';
                         $descLength = mb_strlen($description);
-                        $truncatedDesc = $descLength > 120 ? mb_substr($description, 0, 120) . '...' : $description;
+                        $truncatedDesc = $descLength > 100 ? mb_substr($description, 0, 100) . '...' : $description;
                         @endphp
 
                         @if(count($tags) > 0)
@@ -893,12 +904,12 @@
 
                         <div x-data="{ expanded: false }" class="mb-6 flex-grow">
                             <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed"
-                                :class="expanded ? '' : 'line-clamp-3'">
+                                :class="expanded ? '' : 'line-clamp-2'">
                                 <span x-show="!expanded">{{ $truncatedDesc }}</span>
                                 <span x-show="expanded" x-cloak>{{ $description }}</span>
                             </p>
 
-                            @if($descLength > 120)
+                            @if($descLength > 100)
                             <button @click="expanded = !expanded" class="more-btn text-sm mt-3 font-bold flex items-center gap-2 transition-all duration-300 hover:gap-3">
                                 <span x-text="expanded ? 'أقل' : 'المزيد'"></span>
                                 <i class="fas text-xs transition-transform duration-300" :class="expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
@@ -921,13 +932,29 @@
                     </div>
                 </div>
                 @endforeach
+                </div>
 
-                @if($featuredProjects->count() > 6)
-                <div class="text-center mt-12">
-                    <a href="#" class="inline-flex items-center gap-2 px-8 py-4 border-2 border-indigo-600 text-indigo-600 dark:text-indigo-400 rounded-full font-semibold hover:bg-indigo-600 hover:text-white transition-all">
-                        <i class="fas fa-folder-open"></i>
-                        {{ __('messages.view_all_projects') }}
-                    </a>
+                @if($totalPages > 1)
+                <div class="flex justify-center items-center gap-2 mt-12">
+                    <button @click="currentPage = currentPage > 1 ? currentPage - 1 : 1" 
+                            :disabled="currentPage === 1"
+                            class="w-10 h-10 rounded-full flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-gray-100 dark:bg-gray-800 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600">
+                        <i class="fas fa-chevron-{{ $locale === 'ar' ? 'right' : 'left' }}"></i>
+                    </button>
+                    
+                    <template x-for="page in totalPages" :key="page">
+                        <button @click="currentPage = page"
+                                class="w-10 h-10 rounded-full flex items-center justify-center transition-all"
+                                :class="currentPage === page ? 'bg-indigo-600 text-white' : 'bg-gray-100 dark:bg-gray-800 hover:bg-indigo-600 hover:text-white'">
+                            <span x-text="page"></span>
+                        </button>
+                    </template>
+
+                    <button @click="currentPage = currentPage < totalPages ? currentPage + 1 : totalPages" 
+                            :disabled="currentPage === totalPages"
+                            class="w-10 h-10 rounded-full flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed bg-gray-100 dark:bg-gray-800 hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600">
+                        <i class="fas fa-chevron-{{ $locale === 'ar' ? 'left' : 'right' }}"></i>
+                    </button>
                 </div>
                 @endif
             </div>

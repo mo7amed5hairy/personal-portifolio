@@ -13,12 +13,12 @@ class ProjectService
 
     public function getAllProjects()
     {
-        return $this->projectRepository->getOrdered();
+        return $this->projectRepository->getOrdered()->get();
     }
 
     public function getFeaturedProjects()
     {
-        return $this->projectRepository->getFeatured();
+        return $this->projectRepository->getFeatured()->get();
     }
 
     public function createProject(ProjectDTO $dto)

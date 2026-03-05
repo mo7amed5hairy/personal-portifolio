@@ -1,0 +1,158 @@
+# 🧠 Comprehensive Installation & Operation Guide - Personal Portfolio Website
+
+####################################
+📋 Table of Contents
+####################################
+1. Prerequisites
+2. Local Server Installation
+3. Hosting Installation (cPanel / VPS)
+4. Database Setup
+5. Environment Configuration (.env)
+6. Installing Dependencies
+7. Running the Platform
+8. Customization & Editing Guide
+9. Troubleshooting
+10. Contact & Support Information
+
+####################################
+🔧 1. Prerequisites
+####################################
+
+### Server Requirements:
+- PHP 8.2 or higher (8.3 recommended)
+- Composer 2.6 or higher
+- MySQL 8.0 or higher (or SQLite)
+- Laravel Framework 12.x
+- Node.js 18 or higher with npm
+
+### Required PHP Extensions:
+- BCMath, Ctype, Fileinfo, JSON, Mbstring, OpenSSL, PDO, Tokenizer, XML, GD
+
+####################################
+💻 2. Local Server Installation
+####################################
+
+### Step 2.1: Local Environment Setup
+- Install Laragon (recommended) or XAMPP.
+- Ensure PHP 8.2 and a modern MySQL version are active.
+
+### Step 2.2: Copying Files
+- Extract project files into the www folder (for Laragon) or htdocs (for XAMPP).
+- Example Path: C:\laragon\www\personal-portifolio
+
+### Step 2.3: Open Terminal
+- Open a terminal within the project directory.
+
+####################################
+🗄️ 3. Database Setup
+####################################
+
+### Step 3.1: Create Database
+1. Open phpMyAdmin.
+2. Create a new database named portfolio_db.
+3. Choose collation utf8mb4_unicode_ci.
+
+### Step 3.2: Initialize Tables
+- No manual SQL import is needed; we will use Laravel commands later.
+
+####################################
+⚙️ 4. Environment Configuration (.env)
+####################################
+
+### Step 4.1: Create .env File
+- Copy .env.example and rename it to .env.
+- Command: cp .env.example .env
+
+### Step 4.2: Edit Settings
+Open the .env file and modify the following data to match your local setup:
+
+APP_NAME="Muhammad Khairy - Portfolio"
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=portfolio_db
+DB_USERNAME=root
+DB_PASSWORD=
+
+####################################
+📦 5. Installing Dependencies
+####################################
+
+Run the following commands in order:
+
+# Install PHP dependencies
+composer install
+
+# Generate application key
+php artisan key:generate
+
+# Install JavaScript dependencies
+npm install
+
+# Build asset files (CSS/JS)
+npm run build
+
+# Run migrations and seed data
+php artisan migrate --seed
+
+####################################
+🚀 6. Running the Platform
+####################################
+
+### Start the Built-in Server:
+php artisan serve
+
+- The platform will be accessible at: http://localhost:8000
+
+####################################
+🔐 7. Admin Dashboard Account
+####################################
+
+Since there is no default user, you can create an admin account via Tinker:
+php artisan tinker
+
+Then type:
+User::create(['name' => 'Admin', 'email' => 'admin@example.com', 'password' => bcrypt('password123')]);
+
+- Admin Login URL: http://localhost:8000/admin/login
+
+####################################
+🎨 8. Customization & Editing Guide
+####################################
+
+### 8.1 Images & Files
+- Images are uploaded via the dashboard and stored in storage/app/public.
+- Link the storage folder to the public directory: php artisan storage:link.
+
+### 8.2 Change Colors (Tailwind CSS)
+- Open tailwind.config.js to modify the primary color palette.
+- Open resources/css/app.css to modify core CSS variables.
+
+### 8.3 Translations
+- Text strings are located in resources/lang/ar and resources/lang/en.
+
+####################################
+🔧 9. Server Settings (For Hosting)
+####################################
+
+### 9.1 .htaccess File
+- Ensure it exists in the public directory for correct root-level routing.
+
+### 9.2 Directory Permissions
+chmod -R 775 storage
+chmod -R 775 bootstrap/cache
+
+####################################
+📞 10. Contact & Support Information
+####################################
+
+### Lead Developer:
+- Name: Muhammad Khairy
+- Email: mokhairy051187@gmail.com
+
+####################################
+🎯 Conclusion
+####################################
+This project is designed to be a professional, flexible, and easy-to-customize portfolio. Good luck with your setup!
