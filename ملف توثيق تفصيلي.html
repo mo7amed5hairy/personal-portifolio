@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التوثيق الشامل - معرض الأعمال الاحترافي (محمد خيري)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #6366f1;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+        }
+        .sidebar {
+            width: 280px;
+            background: #fff;
+            height: 100vh;
+            position: fixed;
+            border-left: 1px solid var(--border);
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .main-content {
+            margin-right: 280px;
+            padding: 40px 60px;
+            max-width: 1000px;
+        }
+        h1, h2, h3 { color: var(--primary); }
+        h1 { border-bottom: 3px solid var(--primary); padding-bottom: 15px; margin-bottom: 40px; }
+        h2 { margin-top: 50px; border-right: 5px solid var(--primary); padding-right: 15px; background: #f1f5f9; padding-top: 5px; padding-bottom: 5px; }
+        .nav-link { display: block; padding: 10px 15px; color: var(--text); text-decoration: none; border-radius: 6px; transition: 0.3s; margin-bottom: 5px; }
+        .nav-link:hover { background: #f1f5f9; color: var(--primary); }
+        .step-image { width: 100%; border-radius: 12px; border: 1px solid var(--border); margin: 25px 0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        pre { background: #1e293b; color: #f8fafc; padding: 20px; border-radius: 8px; direction: ltr; overflow-x: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        code { color: #e11d48; font-weight: bold; background: #fff1f2; padding: 2px 5px; border-radius: 4px; }
+        .tip { background: #fef9c3; border-right: 5px solid #eab308; padding: 20px; border-radius: 8px; margin: 25px 0; }
+        .success { background: #f0fdf4; border-right: 5px solid #22c55e; padding: 20px; border-radius: 8px; margin: 25px 0; }
+        footer { margin-top: 100px; text-align: center; border-top: 1px solid var(--border); padding-top: 30px; color: var(--muted); }
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-right: 0; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3 style="text-align:center">التوثيق الفني</h3>
+    <hr>
+    <a href="#intro" class="nav-link">1. مقدمة عن المنتج</a>
+    <a href="#requirements" class="nav-link">2. المتطلبات والبيئة</a>
+    <a href="#installation" class="nav-link">3. تثبيت المنتج (محلياً)</a>
+    <a href="#hosting" class="nav-link">4. التثبيت على الاستضافة</a>
+    <a href="#env" class="nav-link">5. إعداد ملف البيئة</a>
+    <a href="#usage" class="nav-link">6. طريقة الاستخدام</a>
+    <a href="#dashboard" class="nav-link">7. لوحة التحكم</a>
+    <a href="#modification" class="nav-link">8. التعديل والتخصيص</a>
+    <a href="#faq" class="nav-link">9. استكشاف الأخطاء</a>
+    <a href="#contact" class="nav-link">10. الدعم الفني</a>
+</div>
+
+<div class="main-content">
+    <section id="intro">
+        <h1>🔍 التوثيق الشامل لمعرض الأعمال الاحترافي</h1>
+        <p>مرحباً بك! هذا الدليل يهدف لمساعدتك في تثبيت وتخصيص واستخدام مشروع "معرض الأعمال" المطور بتقنية <strong>Laravel 12</strong>. يرجى اتباع الخطوات بدقة لضمان عمل كافة المميزات.</p>
+    </section>
+
+    <section id="requirements">
+        <h2>2. المتطلبات والبيئة التشغيلية</h2>
+        <ul>
+            <li><strong>PHP:</strong> الإصدار 8.2 أو أحدث (مفضل 8.3).</li>
+            <li><strong>Composer:</strong> الإصدار 2.6 فما فوق.</li>
+            <li><strong>Node.js:</strong> الإصدار 18 فما فوق (لإدارة الواجهات الأمامية).</li>
+            <li><strong>قاعدة بيانات:</strong> MySQL (إصدار 8 فما فوق) أو SQLite.</li>
+            <li><strong>خادم الويب:</strong> Apache أو Nginx (مع تفعيل <code>mod_rewrite</code>).</li>
+        </ul>
+    </section>
+
+    <section id="installation">
+        <h2>3. تثبيت المنتج (على السيرفر المحلي)</h2>
+        <p>لتشغيل المنتج على جهازك الشخصي باستخدام برامج مثل <strong>Laragon</strong> أو <strong>XAMPP</strong>، اتبع الآتي:</p>
+        <ol>
+            <li>قم بفك ضغط ملفات المشروع في مجلد الخادم المخصص.</li>
+            <li>افتح الطرفية (Terminal) داخل مجلد المشروع وقم بتنفيذ الأوامر التالية بالترتيب:</li>
+        </ol>
+        <pre>
+# تثبيت المكتبات البرمجية
+composer install
+
+# تثبيت مكتبات الواجهة الأمامية
+npm install
+
+# بناء ملفات التصميم
+npm run build</pre>
+        <img src="documentation/assets/step_1_terminal.png" alt="أوامر التنصيب" class="step-image">
+    </section>
+
+    <section id="hosting">
+        <h2>4. التثبيت على الاستضافة (cPanel / VPS)</h2>
+        <ol>
+            <li>قم برفع كافة الملفات إلى مجلد <code>public_html</code> (أو مجلد فرعي حسب رغبتك).</li>
+            <li>تأكد من أن المجلد الرئيسي (Document Root) يشير إلى مجلد <strong>public</strong> داخل المشروع.</li>
+            <li>أعط صلاحيات الكتابة (775) للمجلدات التالية:
+                <ul>
+                    <li><code>storage</code></li>
+                    <li><code>bootstrap/cache</code></li>
+                </ul>
+            </li>
+        </ol>
+    </section>
+
+    <section id="env">
+        <h2>5. إعداد قاعدة البيانات وملف البيئة</h2>
+        <p>1. قم بإنشاء قاعدة بيانات جديدة عبر <strong>phpMyAdmin</strong>:</p>
+        <img src="documentation/assets/step_2_db.png" alt="إنشاء قاعدة بيانات" class="step-image">
+        
+        <p>2. انسخ ملف <code>.env.example</code> وقم بتسميته إلى <code>.env</code>.</p>
+        <p>3. عدل إعدادات الربط في ملف <code>.env</code> لتطابق بيانات القاعدة التي أنشأتها:</p>
+        <img src="documentation/assets/step_3_env.png" alt="تعديل ملف البيئة" class="step-image">
+        
+        <p>4. نفذ الأوامر التالية لتهيئة الجداول وبذر البيانات الافتراضية:</p>
+        <pre>
+php artisan key:generate
+php artisan migrate --seed
+php artisan storage:link</pre>
+    </section>
+
+    <section id="usage">
+        <h2>6. طريقة الاستخدام</h2>
+        <p>بعد إتمام الخطوات السابقة، يمكنك تصفح الموقع عبر الرابط المحلي أو رابط الاستضافة. ستجد الموقع يعرض بيانات افتراضية يمكنك تعديلها بالكامل.</p>
+        <img src="documentation/assets/step_4_home.png" alt="معاينة الواجهة" class="step-image">
+    </section>
+
+    <section id="dashboard">
+        <h2>7. لوحة التحكم (Admin Dashboard)</h2>
+        <p>لوحة التحكم تتيح لك إدارة كامل للمحتوى دون الحاجة للمساس بالكود البرمجي.</p>
+        <ul>
+            <li><strong>رابط الدخول:</strong> <code>yoursite.com/admin/login</code></li>
+            <li><strong>بيانات الدخول الافتراضية:</strong>
+                <ul>
+                <li>البريد: <code>admin@portfolio.com</code></li>
+                <li>كلمة المرور: <code>admin123</code> (أو التي حددتها في الـ Seeder).</li>
+               
+            </ul>
+            </li>
+        </ul>
+        <img src="documentation/assets/step_5_admin.png" alt="لوحة التحكم" class="step-image">
+        <div class="tip">
+            <strong>نصيحة:</strong> يمكنك تغيير بيانات السيرة الذاتية والشعار من قسم "الملف الشخصي" داخل لوحة التحكم.
+        </div>
+    </section>
+
+    <section id="modification">
+        <h2>8. التعديل والتخصيص</h2>
+        <h3>أ- تغيير الألوان:</h3>
+        <p>المشروع مبني باستخدام **Tailwind CSS 4**. لتغيير اللون الأساسي:</p>
+        <ol>
+            <li>افتح ملف <code>tailwind.config.js</code>.</li>
+            <li>عدل قيم الألوان في قسم <code>primary</code>.</li>
+            <li>نفذ <code>npm run build</code> لتطبيق التغييرات.</li>
+        </ol>
+
+
+        <h3>ب- إضافة مشاريع جديدة:</h3>
+        <p>من لوحة التحكم، اذهب لقسم <strong>المشاريع</strong>، واختر "إضافة جديد". يمكنك رفع الصور وتحديد التقنيات المستخدمة وسيظهر المشروع تلقائياً في الصفحة الرئيسية.</p>
+   
+        <h3>ت- إضافة  كورسات أو شهادات جديدة:</h3>
+        <p>من لوحة التحكم، اذهب لقسم <strong>الكورسات</strong>، واختر "إضافة جديد". يمكنك رفع الصور وتحديد التقنيات المستخدمة وسيظهر المشروع تلقائياً في الصفحة الرئيسية.</p>
+   
+        <h3>ث- إضافة أقسام جديدة:</h3>
+        <p>من لوحة التحكم، اذهب لقسم <strong>الأقسام</strong>، واختر "إضافة جديد". يمكنك رفع الصور وتحديد التقنيات المستخدمة وسيظهر المشروع تلقائياً في الصفحة الرئيسية.</p>
+   
+   
+    </section>
+
+    <section id="faq">
+        <h2>9. استكشاف الأخطاء وإصلاحها</h2>
+        <div class="tip">
+            <strong>مشكلة: الخطأ 500 عند التشغيل على الاستضافة.</strong><br>
+            الحل: تأكد من أن إصدار PHP هو 8.2+، وتأكد من حذف الملفات داخل <code>bootstrap/cache/</code> كما شرحنا سابقاً.
+        </div>
+        <div class="tip">
+            <strong>مشكلة: الصور لا تظهر بعد الرفع.</strong><br>
+            الحل: تأكد من تنفيذ الأمر <code>php artisan storage:link</code>.
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>10. الدعم الفني</h2>
+        <p>إذا واجهتك أي مشكلة أو كان لديك استفسار، لا تتردد في التواصل معي:</p>
+        <ul>
+            <li><strong>البريد الإلكتروني:</strong> mokhairy051187@gmail.com</li>
+            <li><strong>الاسم:</strong> محمد خيري</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2025 - تم التطوير بواسطة محمد خيري</p>
+    </footer>
+</div>
+
+</body>
+</html>
